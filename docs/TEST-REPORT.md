@@ -17,7 +17,7 @@ Verified on the latest completed run:
 
 ## Automated accessibility assessment
 
-The CI suite runs axe-core against the editor interface and an inserted template canvas for WCAG 2.0/2.1 A and AA rules. Critical and serious automated findings fail the job. This is a screening check, not a complete WCAG conformance assessment; manual keyboard, screen-reader, focus-order, zoom/reflow and cognitive accessibility testing remain necessary.
+The CI suite runs axe-core against the editor interface and an inserted template canvas for WCAG 2.0/2.1 A and AA rules. Initial screening found missing labels and low-contrast text. The page settings fields and export selector were labelled, and the affected interface text colours were adjusted. The latest Chromium, Firefox and WebKit run reported zero automated violations on the editor and inserted canvas. This is a screening check, not a complete WCAG conformance assessment; manual keyboard, screen-reader, focus-order, zoom/reflow and cognitive accessibility testing remain necessary.
 
 ## Application security controls reviewed
 
@@ -36,10 +36,10 @@ The CI suite runs axe-core against the editor interface and an inserted template
 ## Hosting and repository governance assessment
 
 - The Pages workflow is configured to deploy only from `main`, with Pages write and OIDC permissions scoped to the deployment workflow.
-- The Pages deployment URL and current deployment state could not be independently verified through the available GitHub connection or web access during this assessment.
-- The repository rulesets endpoint returned an empty list. The branch-protection endpoint returned HTTP 403 to the connected GitHub integration, so classic protection settings could not be inspected or changed.
-- Enable a main-branch ruleset requiring pull requests and the three browser regression checks, and blocking force pushes and branch deletion.
-- The repository About description still needs a maintainer review to ensure it reflects the current 750-design catalogue.
+- GitHub Pages deployment workflow completed successfully for the current `main` revision; the workflow reported the expected URL: `https://abduays.github.io/devsections-studio/`. Direct external page retrieval was unavailable in this assessment, so deployment success is confirmed but independent live-page rendering is not.
+- GitHub reports `main` as `protected: false`; the repository rulesets endpoint is empty.
+- The connected integration does not provide branch-protection write access. Enable a main-branch ruleset requiring pull requests and the three browser regression checks, and blocking force pushes and branch deletion.
+- The repository About description remains stale at 210 designs; update it to describe the current 750-design catalogue.
 
 ## Not covered
 
@@ -51,4 +51,4 @@ The CI suite runs axe-core against the editor interface and an inserted template
 
 ## Release assessment
 
-The automated browser and framework build checks have passed on the merged revision. This is not a guarantee that every user-authored HTML/CSS combination is safe in downstream hosting environments. Browser-local project data is not encrypted; do not store credentials or confidential customer information in projects. Complete the hosting and branch-governance checks before treating repository operations as fully hardened.
+The automated browser and framework build checks have passed on the merged revision. This is not a guarantee that every user-authored HTML/CSS combination is safe in downstream hosting environments. Browser-local project data is not encrypted; do not store credentials or confidential customer information in projects. The Pages deployment action is successful. Complete live browser verification, branch protection and repository metadata maintenance before treating repository operations as fully hardened.
