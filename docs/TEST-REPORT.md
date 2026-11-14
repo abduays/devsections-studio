@@ -1,33 +1,30 @@
-# DevSections Studio 2.0 — Test report
+# DevSections Studio 2.1 — Test report
 
-## Automated checks
+## Source-level checks
 
-| Check | Result |
+| Check | Current status |
 |---|---|
-| Main and add-on JavaScript syntax (`node --check`) | PASS |
-| HTML parse | PASS |
-| Inline CSS parse (`tinycss2`) | PASS |
-| Template count | PASS — 210 |
-| Category count | PASS — 15 |
-| Designs per category | PASS — 14 each |
-| Unique template IDs | PASS — 210 unique IDs |
-| Full-site starter presets | PASS — all 10 create multi-page projects with populated sections |
-| Responsive export metadata | PASS — stable section IDs and media-query overrides included in static HTML |
-| Static HTML export | PASS — generated ZIP contains 5 files in test project |
-| React + Vite export | PASS — generated ZIP contains 7 files |
-| Next.js export | PASS — generated ZIP contains 8 files |
-| Vue + Vite export | PASS — generated ZIP contains 7 files |
-| SvelteKit export | PASS — generated ZIP contains 10 files |
-| Framework package JSON parsing | PASS |
+| Repository entry point | Verified: `index.html` exists at repository root |
+| Category definitions | 15 section categories plus All |
+| Catalogue generation rule | 50 variants per category; 750 expected |
+| Template ID generation | Category-prefixed IDs from 1 to 50 |
+| Design-system combinations | 10 visual treatments × 5 layout treatments per category |
+| GitHub Pages deployment | PASS: latest Actions deployment completed successfully |
+| Browser interaction | Not verified in a real browser in this session |
+| Framework export production builds | Not verified for this release |
 
-Runtime tests used a Node VM harness with browser API stubs. They verified template registration, starter creation and export generation. They do not replace testing in a real browser.
+## Catalogue design model
+
+Each category uses six underlying section composition patterns. These are combined with ten visual treatments and five layout treatments to produce 50 selectable variants per category. This is a combinatorial design catalogue: the entries are visually differentiated combinations, not 750 separately authored structural compositions.
 
 ## Not verified
 
-- Full interactive browser rendering and pointer behaviour were not verified. Chromium headless repeatedly stalled in the environment with D-Bus/zygote errors and produced no DOM dump.
-- Framework exports were generated and package JSON was parsed, but dependencies were not installed and production builds were not run.
-- Live form submission, CMS integrations, hosting, authentication and remote publishing are not implemented.
+- Full interactive browser rendering and pointer behaviour.
+- Cross-browser testing in current Chrome, Edge and Firefox.
+- Detailed mobile and tablet layout review for all 750 variants.
+- Framework export dependency installation and production builds.
+- Live form submission, CMS integrations, cloud hosting, authentication and remote publishing.
 
 ## Release assessment
 
-The 2.0 file passes the automated syntax, structure, catalogue, starter-kit and export-generation checks. Treat it as a testable release candidate, not a fully browser-verified production release. Test in Chrome/Edge/Firefox and build each framework export before deploying a real customer website.
+The repository has a successful GitHub Pages workflow deployment. The catalogue expansion and source changes are committed, but a real-browser regression pass is still required. Treat this release as a testable update, not as fully browser-verified production software.
