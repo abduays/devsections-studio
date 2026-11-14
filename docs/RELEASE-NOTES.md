@@ -18,6 +18,8 @@
 - Validated browser-local project data before loading and media references before use.
 - Restricted image references to HTTP(S) or safe relative URLs and capped the local image shelf.
 - Added a browser regression workflow that tests malicious project imports and unsafe CSS/URL handling.
+- Added a restrictive Content Security Policy to the editor and static HTML exports.
+- Pinned GitHub Actions to verified commit SHAs and enabled weekly Dependabot updates.
 
 ## Editor and export checks
 
