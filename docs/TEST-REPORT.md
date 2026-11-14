@@ -1,30 +1,40 @@
-# DevSections Studio 2.1 — Test report
+# DevSections Studio 2.2 — Test report
 
-## Source-level checks
+## Automated browser regression suite
 
-| Check | Current status |
-|---|---|
-| Repository entry point | Verified: `index.html` exists at repository root |
-| Category definitions | 15 section categories plus All |
-| Catalogue generation rule | 50 variants per category; 750 expected |
-| Template ID generation | Category-prefixed IDs from 1 to 50 |
-| Design-system combinations | 10 visual treatments × 5 layout treatments per category |
-| GitHub Pages deployment | PASS: latest Actions deployment completed successfully |
-| Browser interaction | Not verified in a real browser in this session |
-| Framework export production builds | Not verified for this release |
+The GitHub Actions workflow `.github/workflows/quality.yml` installs Chromium and runs `tests/browser-smoke.mjs`.
 
-## Catalogue design model
+The browser suite checks:
+- Exactly 750 catalogue entries across 15 categories.
+- Exactly 50 designs and 50 unique IDs per category.
+- Paginated library rendering (24 cards per page).
+- Category filtering and pagination.
+- Brand customiser preview and brand token updates.
+- Mobile and desktop viewport switching.
+- Template insertion into the page canvas.
+- Sanitisation of malicious imported project markup.
+- Static HTML, React, Next.js, Vue and Svelte ZIP archive integrity.
+- Local project persistence after reload.
+- Uncaught browser runtime errors.
 
-Each category uses six underlying section composition patterns. These are combined with ten visual treatments and five layout treatments to produce 50 selectable variants per category. This is a combinatorial design catalogue: the entries are visually differentiated combinations, not 750 separately authored structural compositions.
+## Security checks in the application
 
-## Not verified
+- Project imports are capped at 5 MB, 30 pages and 100 sections per page.
+- Imported section HTML is capped at 150 KB per section and sanitised.
+- Imported page and section IDs are validated.
+- Brand colours, font stacks, corner radii, style overrides and responsive settings are allowlisted.
+- Event-handler attributes and active embedded content are removed.
+- URL schemes and CSS declarations are filtered.
+- Media references are capped at 100 entries and validated before use.
 
-- Full interactive browser rendering and pointer behaviour.
-- Cross-browser testing in current Chrome, Edge and Firefox.
-- Detailed mobile and tablet layout review for all 750 variants.
-- Framework export dependency installation and production builds.
-- Live form submission, CMS integrations, cloud hosting, authentication and remote publishing.
+## Not covered by the browser smoke suite
+
+- Exhaustive visual review of all 750 designs at every viewport.
+- Screen-reader testing and formal WCAG conformance.
+- Production builds of all four generated framework starters.
+- Penetration testing by an independent security reviewer.
+- Git history rewriting or credential revocation if a real secret is discovered in an earlier commit.
 
 ## Release assessment
 
-The repository has a successful GitHub Pages workflow deployment. The catalogue expansion and source changes are committed, but a real-browser regression pass is still required. Treat this release as a testable update, not as fully browser-verified production software.
+A passing browser workflow is required before merging this branch. Automated tests reduce regression risk but do not constitute a full security audit or guarantee that user-authored custom HTML is safe in every downstream hosting environment.
