@@ -47,9 +47,7 @@ try {
   assert.equal(await page.locator('#templateList .template-card').count(), 24);
   assert.match(await page.locator('.library-pagination').innerText(), /Page 1 of 3/);
 
-  await page.locator('#panel-tabs button[data-panel="brand"], button[data-panel="brand"]').first().click().catch(async () => {
-    await page.locator('button[data-panel="brand"]').click();
-  });
+  await page.locator('button[data-panel="brand"]').click();
   await page.locator('#brandHex').fill('#ff0000');
   assert.equal(await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--brand').trim()), '#ff0000');
   assert.ok(await page.locator('#brandLivePreview .ds').count(), 'brand preview should render a real section');
@@ -58,6 +56,7 @@ try {
   assert.ok(await page.locator('#canvas.mobile').count(), 'mobile preview mode should activate');
   await page.locator('button.device').filter({ hasText: 'Desktop' }).click();
 
+  await page.locator('button[data-panel="library"]').click();
   await page.locator('#categoryList .cat-btn').filter({ hasText: 'Hero sections' }).click();
   await page.locator('#templateList .template-card').first().locator('button.add').click();
   assert.equal(await page.locator('#canvas .canvas-section').count(), 1, 'template should add to canvas');
@@ -80,7 +79,7 @@ try {
     mimeType: 'application/json',
     buffer: Buffer.from(JSON.stringify(hostileProject))
   });
-  await page.waitForFunction(() => document.querySelectorAll('#canvas .canvas-section').length === 1);
+  await page.waitForFunction(() => document.querySelector('#canvas h1')?.textContent === 'Safe text');
   assert.equal(await page.locator('#canvas script, #canvas iframe, #canvas [onerror]').count(), 0, 'dangerous markup should be removed');
   assert.equal(await page.locator('#canvas a[href^="javascript:"]').count(), 0, 'javascript URLs should be removed');
   assert.equal(await page.evaluate(() => window.__devsectionsPwned), undefined, 'imported payload must not execute');
