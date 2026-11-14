@@ -2,26 +2,20 @@
 
 ## Automated browser regression suite
 
-The GitHub Actions workflow `.github/workflows/quality.yml` installs Chromium and runs `tests/browser-smoke.mjs`.
+GitHub Actions runs `tests/browser-smoke.mjs` in Chromium, Firefox and WebKit on pushes to the default branch and pull requests targeting it.
 
-The browser suite checks:
-- Exactly 750 catalogue entries across 15 categories.
-- Exactly 50 designs and 50 unique IDs per category.
-- Global template ID uniqueness.
-- One valid section root for every generated template.
-- Paginated library rendering (24 cards per page).
-- Category filtering and pagination.
-- Brand customiser preview and brand token updates.
-- Mobile and desktop viewport switching.
-- Horizontal overflow scan across all 750 templates at 375px, 768px and 1440px container widths.
-- Template insertion into the page canvas.
-- Sanitisation of malicious imported project markup, event handlers, unsafe URL schemes and CSS URL loads.
-- Static HTML, React, Next.js, Vue and Svelte ZIP archive integrity.
-- React and Next.js JSX parsing, Vue single-file component parsing/template compilation, and Svelte component compilation.
+The suite checks:
+- Exactly 750 catalogue entries across 15 categories, with 50 unique designs per category.
+- Global template ID uniqueness and valid section root markup.
+- Pagination and category filtering.
+- Brand preview, responsive device modes and template insertion.
+- Horizontal overflow across all 750 templates at 375px, 768px and 1440px widths.
+- Sanitisation of hostile imported markup, event handlers, unsafe URL schemes and CSS URL loads.
+- ZIP integrity for static HTML, React, Next.js, Vue and Svelte exports.
+- React/Next JSX parsing, Vue SFC/template compilation and Svelte component compilation.
+- Production dependency installation and production builds for React/Vite, Next.js, Vue/Vite and SvelteKit (executed in the Chromium job).
 - Source scan for common credential patterns, private-key blocks, dynamic code execution and non-placeholder email addresses.
-- Content Security Policy and no-referrer metadata.
-- Local project persistence after reload.
-- Uncaught browser runtime errors.
+- Content Security Policy, no-referrer metadata, local project persistence and browser runtime errors.
 
 ## Security controls in the application
 

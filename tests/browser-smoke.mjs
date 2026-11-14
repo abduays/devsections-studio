@@ -5,7 +5,7 @@ import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { chromium } from 'playwright';
+import { chromium, firefox, webkit } from 'playwright';
 import { transform } from 'esbuild';
 import { parse as parseVue, compileTemplate } from '@vue/compiler-sfc';
 import { compile as compileSvelte } from 'svelte/compiler';
@@ -32,7 +32,9 @@ const server = createServer((req, res) => {
 });
 await new Promise(resolve => server.listen(4173, '127.0.0.1', resolve));
 const temp = await mkdtemp(join(tmpdir(), 'devsections-smoke-'));
-const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
+const browserType = ({ chromium, firefox, webkit })[process.env.BROWSER || 'chromium'];
+assert.ok(browserType, 'BROWSER must be chromium, firefox or webkit');
+const browser = await browserType.launch({ headless: true, ...(process.env.BROWSER === 'chromium' ? { args: ['--no-sandbox'] } : {}) });
 const errors = [];
 try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
@@ -181,6 +183,27 @@ try {
         const files = generated.filter(file => file.endsWith('.svelte'));
         assert.ok(files.length, 'Svelte export should contain route components');
         for (const file of files) compileSvelte(await readFile(file, 'utf8'), { filename: file, generate: 'client' });
+        const appShell = generated.find(file => file.endsWith(join('src', 'app.html')));
+        assert.ok(appShell, 'SvelteKit export should include src/app.html');
+        const shellSource = await readFile(appShell, 'utf8');
+        assert.match(shellSource, /%sveltekit\.head%/);
+        assert.match(shellSource, /%sveltekit\.body%/);
+      }
+      if (process.env.SKIP_FRAMEWORK_BUILDS !== '1') {
+        console.log('Building generated ' + format + ' starter with production dependencies...');
+        execFileSync('npm', ['install', '--no-audit', '--no-fund'], {
+          cwd: outputDir,
+          stdio: 'inherit',
+          timeout: 12 * 60 * 1000,
+          env: { ...process.env, NEXT_TELEMETRY_DISABLED: '1' }
+        });
+        execFileSync('npm', ['run', 'build'], {
+          cwd: outputDir,
+          stdio: 'inherit',
+          timeout: 12 * 60 * 1000,
+          env: { ...process.env, NEXT_TELEMETRY_DISABLED: '1', CI: '1' }
+        });
+        console.log('PASS: ' + format + ' production build');
       }
     }
   }
@@ -189,7 +212,7 @@ try {
   await page.waitForFunction(() => window.DEVSECTIONS_STUDIO_VERSION === '2.2.0');
   assert.equal(await page.locator('#canvas .canvas-section').count(), 1, 'saved project should reload');
   assert.deepEqual(errors, [], 'browser should have no uncaught page errors');
-  console.log('PASS: 750-template catalogue, pagination, brand preview, responsive mode, template insertion, malicious import sanitisation, five ZIP exports, local save/reload, and browser runtime.');
+  console.log('PASS: ' + (process.env.BROWSER || 'chromium') + ' browser regression suite, 750-template catalogue, responsive checks, malicious import sanitisation, five ZIP exports, framework source checks, local save/reload and runtime.');
 } finally {
   await browser.close();
   await new Promise(resolve => server.close(resolve));
