@@ -57,6 +57,24 @@ try {
   assert.equal(audit.categories.length, 15, 'catalogue should contain 15 categories');
   assert.equal(new Set(audit.allIds).size, 750, 'all template IDs should be globally unique');
   assert.equal(audit.validRoots, 750, 'all template variants should have one valid section root');
+  for (const width of [375, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    const overflows = await page.evaluate(width => {
+      const probe = document.createElement('div');
+      probe.style.cssText = `position:fixed;left:-2000px;top:0;width:${width}px;visibility:hidden;pointer-events:none;contain:layout style paint`;
+      document.body.appendChild(probe);
+      const bad = [];
+      for (const template of TEMPLATES) {
+        probe.innerHTML = sanitizeMarkup(template.html);
+        const root = probe.firstElementChild;
+        if (root && root.scrollWidth > width + 2) bad.push({ id: template.id, scrollWidth: root.scrollWidth });
+      }
+      probe.remove();
+      return bad.slice(0, 20);
+    }, width);
+    assert.deepEqual(overflows, [], `templates should not overflow horizontally at ${width}px`);
+  }
+  await page.setViewportSize({ width: 1440, height: 1000 });
   for (const structure of audit.structuralPatterns) {
     assert.equal(structure.count, 10, structure.id + ' should have ten distinct structural compositions');
   }
