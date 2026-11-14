@@ -118,6 +118,100 @@ case'cta':return [`<div class="wrap"><span class="eyebrow">Your next step</span>
 case'footer':return [`<div class="wrap"><div class="footer-grid"><div><h3>Northstar<span class="accent">.</span></h3><p>${desc}</p></div>${['Company','Explore','Connect'].map(x=>`<div><strong>${x}</strong>${items.map(i=>`<a href="#">${i}</a>`).join('')}</div>`).join('')}</div><div class="copyright">© 2026 Northstar Studio. All rights reserved.</div></div>`,`<div class="wrap"><div class="footer-grid"><div><h3>Stay in the loop</h3><p>Occasional notes, useful ideas and studio updates.</p><input placeholder="Email address" aria-label="Email address"></div><div><strong>Explore</strong>${items.map(i=>`<a href="#">${i}</a>`).join('')}</div></div><div class="copyright">© 2026 Northstar Studio.</div></div>`,`<div class="wrap"><div class="footer-grid"><div><h3>Northstar Studio</h3><p>${desc}</p></div><div><strong>Links</strong>${items.map(i=>`<a href="#">${i}</a>`).join('')}</div><div><strong>Social</strong><a href="#">Instagram</a><a href="#">LinkedIn</a></div></div><div class="copyright">© 2026 Northstar Studio.</div></div>`,`<div class="wrap"><h3>Northstar Studio</h3><p>${desc}</p><div class="footer-links">${items.map(i=>`<a href="#">${i}</a>`).join('')}</div><div class="copyright">© 2026 Northstar Studio.</div></div>`,`<div class="wrap"><div class="footer-grid"><div><span class="eyebrow" style="color:#a9a2ff">Make it matter</span><h2>Good work starts with a conversation.</h2><p>${desc}</p></div><div><strong>Company</strong>${items.map(i=>`<a href="#">${i}</a>`).join('')}</div><div><strong>Contact</strong><a href="#">hello@example.com</a><a href="#">LinkedIn</a></div></div><div class="copyright">© 2026 Northstar Studio.</div></div>`,`<div class="wrap"><div class="footer-grid"><div><h3>Northstar.</h3><p>${desc}</p></div><div><strong>Quick links</strong>${items.map(i=>`<a href="#">${i}</a>`).join('')}</div></div><div class="copyright">© 2026 Northstar Studio.</div></div>`][v];
 }
 }
+
+function sectionMarkupExtended(cat,v){
+ const d=CONTENT[cat],t=d.title,desc=d.desc,items=d.items;
+ const cards=(labels,kind='card')=>labels.map((x,i)=>`<article class="${kind}"><span class="pill">0${i+1}</span><h3>${esc(x)}</h3><p>${esc(desc)}</p></article>`).join('');
+ const intro=`<div class="section-intro"><span class="eyebrow">${cat.toUpperCase()} / ${v+7}</span><h2>${esc(t)}</h2><p>${esc(desc)}</p></div>`;
+ const visual='<div class="image-placeholder">Add a relevant image or project visual</div>';
+ switch(cat){
+ case 'hero': return [
+  `<div class="wrap hero-layout"><div><span class="eyebrow">A clearer way forward</span><h1>${t}</h1><p>${desc}</p><div class="actions"><a class="btn-main" href="#contact">Start a project ↗</a><a class="btn-alt" href="#work">See how it works</a></div><div class="stats-grid grid"><div><strong class="metric">01</strong><small>Understand</small></div><div><strong class="metric">02</strong><small>Design</small></div><div><strong class="metric">03</strong><small>Deliver</small></div></div></div><div class="card"><span class="pill">A practical starting point</span><h3>One clear next step</h3><p>Use this space for a product screenshot, service image or real project example.</p>${visual}</div></div>`,
+  `<div class="wrap"><div class="section-intro"><span class="eyebrow">Built around your goals</span><h1>${t}</h1><p>${desc}</p><div class="actions" style="justify-content:center"><a class="btn-main" href="#contact">Talk to our team</a></div></div><div class="grid feature-grid">${cards(['Clear direction','Thoughtful execution','Measurable progress'])}</div></div>`,
+  `<div class="wrap hero-layout">${visual}<div><span class="eyebrow">From first idea to finished work</span><h1>${t}</h1><p>${desc}</p><div class="card"><strong>What happens next?</strong><p>Share your requirements. Agree the priorities. Start with a focused first step.</p></div><a class="btn-main" href="#contact">Get started ↗</a></div></div>`,
+  `<div class="wrap"><div class="eyebrow">A better starting point</div><h1 style="max-width:950px">${t}</h1><div class="hero-layout"><div><p>${desc}</p><div class="actions"><a class="btn-main" href="#contact">Make an enquiry</a></div></div><div class="logo-row">Strategy · Design · Delivery · Support</div></div></div>`
+ ][v];
+ case 'nav': return [
+  `<div class="wrap"><div class="nav-layout"><strong>Northstar<span class="accent">.</span></strong><span class="muted">Independent studio · Working worldwide</span><a class="btn-main" href="#contact">Contact</a></div><div class="nav-links" style="justify-content:flex-end;padding-top:16px;border-top:1px solid var(--line)">${items.map(x=>`<a href="#">${esc(x)}</a>`).join('')}</div></div>`,
+  `<div class="wrap nav-layout"><div><small class="eyebrow">Make useful things</small><strong style="display:block;font-size:24px">FIELDWORK</strong></div><div class="nav-links">${items.map(x=>`<a href="#">${esc(x)}</a>`).join('')}</div><span class="pill">Menu +</span></div>`,
+  `<div class="wrap nav-layout"><div class="nav-links">${items.slice(0,2).map(x=>`<a href="#">${esc(x)}</a>`).join('')}</div><strong style="font-size:25px">COMMON / GROUND</strong><div class="nav-links">${items.slice(2).map(x=>`<a href="#">${esc(x)}</a>`).join('')}</div></div>`,
+  `<div class="wrap"><div class="card nav-layout"><strong>STUDIO 04</strong><div class="nav-links">${items.map(x=>`<a href="#">${esc(x)}</a>`).join('')}</div><a class="btn-main" href="#contact">Let's talk ↗</a></div></div>`
+ ][v];
+ case 'about': return [
+  `<div class="wrap"><div class="about-layout"><div><span class="eyebrow">Our story</span><h2>${t}</h2><p>${desc}</p><p>We focus on the questions that matter, then make the decisions and work visible as the project develops.</p><a class="btn-alt" href="#contact">Meet the team ↗</a></div>${visual}</div><div class="steps-grid grid">${cards(['Listen before recommending','Explain the trade-offs','Keep improving'])}</div></div>`,
+  `<div class="wrap">${intro}<div class="grid feature-grid">${cards(['Purpose','Principles','People','Practice'])}</div></div>`,
+  `<div class="wrap about-layout"><div class="card"><span class="eyebrow">A note from the team</span><blockquote>“Good work should be clear to the people who use it and the people who make it.”</blockquote><strong>Our working principle</strong></div><div><h2>${t}</h2><p>${desc}</p>${visual}</div></div>`,
+  `<div class="wrap"><div class="section-intro"><span class="eyebrow">Milestones</span><h2>${t}</h2><p>${desc}</p></div><div class="stats-grid grid">${['01 · The first idea','02 · A shared direction','03 · The work takes shape','04 · Learn and improve'].map(x=>`<div class="card"><h3>${x}</h3><p>Replace with a verified company milestone.</p></div>`).join('')}</div></div>`
+ ][v];
+ case 'services': case 'features': return [
+  `<div class="wrap"><div class="about-layout"><div>${intro}<p>Choose the area that best matches your current requirement.</p></div><div class="card"><span class="eyebrow">Start here</span><h3>Not sure what you need?</h3><p>Explain the outcome you want and use the first conversation to define the scope.</p><a class="btn-main" href="#contact">Discuss a project</a></div></div><div class="grid feature-grid">${cards(items.concat(['Ongoing improvement']))}</div></div>`,
+  `<div class="wrap">${intro}<div class="steps-grid grid">${items.map((x,i)=>`<article class="step"><div class="step-num">0${i+1}</div><h3>${esc(x)}</h3><p>${esc(desc)}</p><a class="accent" href="#contact">Explore this service ↗</a></article>`).join('')}</div></div>`,
+  `<div class="wrap"><div class="section-intro"><span class="eyebrow">How the offer fits together</span><h2>${t}</h2></div><div class="about-layout"><div class="grid">${cards(items)}</div><div class="card"><h3>One connected approach</h3><p>${desc}</p><p>Set the priority, choose the right support and review progress at each stage.</p></div></div></div>`,
+  `<div class="wrap"><div class="section-intro"><span class="eyebrow">At a glance</span><h2>${t}</h2><p>${desc}</p></div><div class="service-grid grid">${items.concat(['Planning','Delivery']).map((x,i)=>`<article class="card"><div class="metric">0${i+1}</div><h3>${esc(x)}</h3><p>${esc(desc)}</p></article>`).join('')}</div></div>`
+ ][v];
+ case 'portfolio': return [
+  `<div class="wrap"><div class="portfolio-grid grid"><div class="portfolio-card" style="grid-row:span 2">${visual}<span class="eyebrow">Featured case study</span><h2>Project title goes here</h2><p>Summarise the brief, the work and the verified outcome.</p></div>${cards(['Identity project','Digital experience'])}</div></div>`,
+  `<div class="wrap">${intro}<div class="grid feature-grid">${['01 / Brand','02 / Product','03 / Campaign','04 / Platform'].map(x=>`<article class="card"><span class="eyebrow">${x}</span>${visual}<h3>Project name</h3><p>Add a short, factual case summary.</p></article>`).join('')}</div></div>`,
+  `<div class="wrap"><div class="section-intro"><span class="eyebrow">Case study index</span><h2>${t}</h2></div><div class="faq-list">${['Project one','Project two','Project three','Project four'].map((x,i)=>`<div class="faq-item nav-layout"><strong>0${i+1}</strong><div><h3>${x}</h3><p>Category · Year · Verified result</p></div><a href="#">View project ↗</a></div>`).join('')}</div></div>`,
+  `<div class="wrap"><div class="section-intro"><span class="eyebrow">Selected work</span><h2>${t}</h2><p>${desc}</p></div>${visual}<div class="grid feature-grid">${cards(['Research and direction','Design and build','Launch and learn'])}</div></div>`
+ ][v];
+ case 'testimonials': return [
+  `<div class="wrap about-layout"><div class="card" style="padding:32px"><span class="eyebrow">Featured client story</span><div class="quote">“Insert an approved quotation from a real customer. Do not publish sample feedback as a real review.”</div><p><strong>Client name</strong><br>Verified role · organisation</p></div><div><h2>${t}</h2><p>${desc}</p>${cards(['Communication','Delivery','Ongoing support'])}</div></div>`,
+  `<div class="wrap">${intro}<div class="quote-grid grid">${['Project experience','Working relationship','Measured outcome','Long-term support'].map((x,i)=>`<article class="card"><span class="eyebrow">Client story 0${i+1}</span><div class="quote">Add a genuine, approved customer quote here.</div><p><strong>Client name</strong><br>Role / company</p></article>`).join('')}</div></div>`,
+  `<div class="wrap"><div class="section-intro"><span class="eyebrow">A word from our clients</span><h2>${t}</h2></div><div class="card"><div class="quote">“Use one concise, verified quotation that explains what changed for the customer.”</div><div class="nav-layout"><strong>Client name</strong><span class="muted">Role · Organisation</span></div></div></div>`,
+  `<div class="wrap"><div class="section-intro"><h2>${t}</h2><p>${desc}</p></div><div class="stats-grid grid">${cards(['A clear process','Useful communication','Work that fits'])}</div></div>`
+ ][v];
+ case 'pricing': return [
+  `<div class="wrap">${intro}<div class="price-grid grid">${['Essentials','Growth','Complete'].map((x,i)=>`<article class="card"><span class="pill">${i===1?'Recommended':'Plan'}</span><h3>${x}</h3><div class="price">Add price <small>/ project</small></div><p>Explain who this option suits and what it includes.</p><ul><li>Included item</li><li>Included item</li><li>Support details</li></ul><a class="btn-main" href="#contact">Discuss this plan</a></article>`).join('')}</div></div>`,
+  `<div class="wrap"><div class="section-intro"><span class="eyebrow">Compare options</span><h2>${t}</h2><p>${desc}</p></div><div class="faq-list">${['Scope','Delivery','Support','Timescale'].map(x=>`<div class="faq-item nav-layout"><strong>${x}</strong><span>Starter · Add details</span><span>Growth · Add details</span><span>Custom · Discuss</span></div>`).join('')}</div></div>`,
+  `<div class="wrap"><div class="section-intro"><span class="eyebrow">Choose your starting point</span><h2>${t}</h2></div><div class="about-layout"><div class="card"><h3>One-off project</h3><div class="price">Add price</div><p>Set out a defined scope and deliverables.</p></div><div class="card"><h3>Ongoing support</h3><div class="price">Add price</div><p>Explain the recurring work and review cycle.</p></div></div></div>`,
+  `<div class="wrap"><div class="section-intro"><h2>${t}</h2><p>${desc}</p></div><div class="grid feature-grid">${cards(['What is included','What is optional','How billing works','How to begin'])}</div></div>`
+ ][v];
+ case 'process': return [
+  `<div class="wrap">${intro}<div class="faq-list">${['Discovery and brief','Plan and priorities','Design and delivery','Review and improve'].map((x,i)=>`<div class="faq-item nav-layout"><strong class="metric">0${i+1}</strong><div><h3>${x}</h3><p>Describe the decisions, outputs and approval points for this stage.</p></div></div>`).join('')}</div></div>`,
+  `<div class="wrap"><div class="section-intro"><span class="eyebrow">A simple sequence</span><h2>${t}</h2></div><div class="steps-grid grid">${cards(['Brief','Direction','Production','Handover'])}</div></div>`,
+  `<div class="wrap about-layout"><div><h2>${t}</h2><p>${desc}</p><a class="btn-main" href="#contact">Talk through the process</a></div><div class="card"><ol>${['Understand the requirement','Agree the scope','Complete the work','Review the outcome'].map(x=>`<li style="padding:12px 0">${x}</li>`).join('')}</ol></div></div>`,
+  `<div class="wrap"><div class="section-intro"><span class="eyebrow">Milestones</span><h2>${t}</h2><p>${desc}</p></div><div class="grid feature-grid">${cards(['Kick-off','First review','Final approval','Launch'])}</div></div>`
+ ][v];
+ case 'team': return [
+  `<div class="wrap about-layout"><div><span class="eyebrow">Leadership</span><h2>${t}</h2><p>${desc}</p><h3>Team member name</h3><p>Role and short professional biography.</p></div><div class="avatar-large">TM</div></div><div class="wrap grid team-grid">${cards(['Design','Development','Operations'])}</div>`,
+  `<div class="wrap">${intro}<div class="faq-list">${['Leadership','Design','Delivery','Support'].map((x,i)=>`<div class="faq-item nav-layout"><span class="avatar">0${i+1}</span><div><h3>${x}</h3><p>Team member · Role · Short biography</p></div><a href="#">Profile ↗</a></div>`).join('')}</div></div>`,
+  `<div class="wrap"><div class="section-intro"><span class="eyebrow">People and roles</span><h2>${t}</h2></div><div class="grid feature-grid">${cards(['Strategy lead','Design lead','Engineering lead','Client support'])}</div></div>`,
+  `<div class="wrap"><div class="section-intro"><h2>${t}</h2><p>${desc}</p></div><div class="about-layout"><div class="avatar-large">TM</div><div><h3>Meet the team</h3><p>Introduce the people responsible for the work. Use real names, roles and approved photographs.</p></div></div></div>`
+ ][v];
+ case 'stats': return [
+  `<div class="wrap"><div class="section-intro"><span class="eyebrow">Progress at a glance</span><h2>${t}</h2><p>${desc}</p></div><div class="stats-grid grid">${['XX+','XX%','XX','X/5'].map((x,i)=>`<article class="stat card"><div class="metric">${x}</div><p>${['Verified projects','Verified outcome','Markets or regions','Verified rating'][i]}</p></article>`).join('')}</div></div>`,
+  `<div class="wrap about-layout"><div><span class="eyebrow">The numbers behind the work</span><h2>${t}</h2><p>${desc}</p></div><div class="grid">${cards(['Reach','Retention','Delivery'])}</div></div>`,
+  `<div class="wrap"><div class="section-intro"><h2>${t}</h2></div><div class="faq-list">${['Projects completed','Customer retention','Markets served','Years in operation'].map(x=>`<div class="faq-item nav-layout"><strong>${x}</strong><span class="metric">Add verified figure</span></div>`).join('')}</div></div>`,
+  `<div class="wrap"><div class="section-intro"><span class="eyebrow">Evidence, not estimates</span><h2>${t}</h2><p>Only publish figures that can be substantiated.</p></div><div class="grid feature-grid">${cards(['Baseline','Measured change','Time period','Source'])}</div></div>`
+ ][v];
+ case 'faq': return [
+  `<div class="wrap about-layout"><div><span class="eyebrow">Help and guidance</span><h2>${t}</h2><p>${desc}</p></div><div class="faq-list">${['Before we begin','During the project','After delivery'].map(x=>`<div class="faq-item"><h3>${x}</h3><p>Add the answer to a real customer question.</p></div>`).join('')}</div></div>`,
+  `<div class="wrap"><div class="section-intro"><span class="eyebrow">Common questions</span><h2>${t}</h2></div><div class="grid feature-grid">${cards(['Getting started','Pricing and scope','Timescales','Support'])}</div></div>`,
+  `<div class="wrap"><div class="section-intro"><h2>${t}</h2><p>${desc}</p></div><div class="faq-list">${['Question one','Question two','Question three','Question four','Question five'].map((x,i)=>`<div class="faq-item nav-layout"><strong>0${i+1}</strong><div><h3>${x}</h3><p>Write a concise answer based on your actual process.</p></div></div>`).join('')}</div></div>`,
+  `<div class="wrap"><div class="card"><span class="eyebrow">Still need help?</span><h2>${t}</h2><p>${desc}</p><a class="btn-main" href="#contact">Ask a question ↗</a></div></div>`
+ ][v];
+ case 'contact': return [
+  `<div class="wrap about-layout"><div><span class="eyebrow">Contact details</span><h2>${t}</h2><p>${desc}</p><div class="faq-list">${['Email address','Telephone','Business hours','Location'].map(x=>`<div class="faq-item"><strong>${x}</strong><p>Add verified public contact details.</p></div>`).join('')}</div></div><div class="card"><h3>Send an enquiry</h3><p>Connect this presentation form to a trusted form service before publishing.</p><input placeholder="Name"><input placeholder="Email"><textarea placeholder="How can we help?"></textarea></div></div>`,
+  `<div class="wrap"><div class="section-intro"><span class="eyebrow">Choose how to reach us</span><h2>${t}</h2><p>${desc}</p></div><div class="grid feature-grid">${cards(['General enquiries','Project enquiries','Existing customers'])}</div></div>`,
+  `<div class="wrap"><div class="card about-layout"><div><span class="eyebrow">Visit or contact</span><h2>${t}</h2><p>Add your public address and verified opening hours here.</p></div>${visual}</div></div>`,
+  `<div class="wrap"><div class="section-intro"><h2>${t}</h2><p>${desc}</p></div><div class="nav-layout"><div><strong>Email</strong><p>hello@example.com</p></div><div><strong>Telephone</strong><p>Add public phone number</p></div><div><strong>Hours</strong><p>Add opening hours</p></div></div></div>`
+ ][v];
+ case 'cta': return [
+  `<div class="wrap about-layout"><div><span class="eyebrow">Ready for the next step?</span><h2>${t}</h2><p>${desc}</p></div><div class="card"><h3>Start with a conversation</h3><p>Explain what visitors can expect after making contact.</p><a class="btn-main" href="#contact">Get in touch ↗</a></div></div>`,
+  `<div class="wrap"><div class="section-intro"><span class="eyebrow">Make progress</span><h2>${t}</h2><p>${desc}</p></div><div class="nav-layout"><span class="pill">Clear scope</span><span class="pill">Practical next steps</span><a class="btn-main" href="#contact">Start here</a></div></div>`,
+  `<div class="wrap"><div class="card nav-layout"><div><h2>${t}</h2><p>${desc}</p></div><div class="actions"><a class="btn-main" href="#contact">Contact us</a><a class="btn-alt" href="#work">View work</a></div></div></div>`,
+  `<div class="wrap"><div class="section-intro"><span class="eyebrow">One useful action</span><h2>${t}</h2><p>${desc}</p><a class="btn-main" href="#contact">Discuss your requirements ↗</a></div></div>`
+ ][v];
+ case 'footer': return [
+  `<div class="wrap"><div class="footer-grid"><div><h3>Northstar<span class="accent">.</span></h3><p>${desc}</p><p><a href="mailto:hello@example.com">hello@example.com</a></p></div>${['Company','Services','Resources'].map(x=>`<div><strong>${x}</strong>${items.map(i=>`<a href="#">${esc(i)}</a>`).join('')}</div>`).join('')}</div><div class="copyright">© 2026 · Add your legal details and social links</div></div>`,
+  `<div class="wrap"><div class="about-layout"><div><h3>Occasional updates</h3><p>Explain what subscribers will receive and how often.</p></div><div><input aria-label="Email address" placeholder="Email address"><button class="btn-main" type="button">Subscribe</button></div></div><div class="footer-links">${items.map(x=>`<a href="#">${esc(x)}</a>`).join('')}</div><div class="copyright">© 2026 · Add privacy and legal links</div></div>`,
+  `<div class="wrap" style="text-align:center"><h3>Northstar Studio</h3><p>${desc}</p><div class="footer-links" style="justify-content:center">${items.map(x=>`<a href="#">${esc(x)}</a>`).join('')}</div><div class="copyright">© 2026 · All rights reserved</div></div>`,
+  `<div class="wrap"><div class="nav-layout"><div><span class="eyebrow">Stay connected</span><h3>Good work, clearly done.</h3></div><div class="footer-links">${items.map(x=>`<a href="#">${esc(x)}</a>`).join('')}</div></div><div class="copyright">© 2026 · Add company and legal details</div></div>`
+ ][v];
+ default:return `<div class="wrap">${intro}<div class="grid feature-grid">${cards(items)}</div></div>`;
+ }
+}
 const DESIGN_SKINS=[
 {name:'Paper',bg:'#ffffff',fg:'#172033'},
 {name:'Warm ivory',bg:'#faf5eb',fg:'#30291f'},
@@ -138,9 +232,9 @@ const DESIGN_LAYOUTS=[
 {name:'Framed panel',css:'framed'}
 ];
 function makeTemplate(cat,v){
- const d=CONTENT[cat],base=v%6,skinIndex=Math.floor(v/5),layoutIndex=v%5;
+ const d=CONTENT[cat],base=v%10,skinIndex=Math.floor(v/10),layoutIndex=v%5;
  const skin=DESIGN_SKINS[skinIndex],layout=DESIGN_LAYOUTS[layoutIndex];
- const id=cat+'-'+(v+1),name=d.names[base]+' · '+skin.name+' · '+layout.name;
+ const id=cat+'-'+(v+1),baseName=base<6?d.names[base]:['Proof-led composition','Structured editorial','Featured content layout','Conversion-focused layout'][base-6],name=baseName+' · '+skin.name+' · '+layout.name;
  const markup=sectionMarkup(cat,base);
  return {id,cat,name,desc:d.desc,html:`<section class="ds cat-${cat} v${base+1}" data-template="${id}" data-skin="${skinIndex}" data-layout="${layout.css}" style="--ds-surface:${skin.bg};--ds-text:${skin.fg}">${markup}</section>`,tags:[cat,skin.name.toLowerCase(),layout.name.toLowerCase(),d.names[base].split(' ')[0].toLowerCase()]};
 }
