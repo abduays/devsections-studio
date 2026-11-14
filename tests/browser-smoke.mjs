@@ -61,7 +61,7 @@ try {
     await page.setViewportSize({ width, height: 900 });
     const overflows = await page.evaluate(width => {
       const probe = document.createElement('div');
-      probe.style.cssText = `position:fixed;left:-2000px;top:0;width:${width}px;visibility:hidden;pointer-events:none;contain:layout style paint`;
+      probe.style.cssText = `position:fixed;left:-2000px;top:0;width:${width}px;container-type:inline-size;visibility:hidden;pointer-events:none;contain:layout style paint`;
       document.body.appendChild(probe);
       const bad = [];
       for (const template of TEMPLATES) {
