@@ -186,8 +186,8 @@ try {
         const appShell = generated.find(file => file.endsWith(join('src', 'app.html')));
         assert.ok(appShell, 'SvelteKit export should include src/app.html');
         const shellSource = await readFile(appShell, 'utf8');
-        assert.match(shellSource, /%svelte\.head%/);
-        assert.match(shellSource, /%svelte\.body%/);
+        assert.match(shellSource, /%sveltekit\.head%/);
+        assert.match(shellSource, /%sveltekit\.body%/);
       }
       if (process.env.SKIP_FRAMEWORK_BUILDS !== '1') {
         console.log('Building generated ' + format + ' starter with production dependencies...');
