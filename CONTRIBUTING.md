@@ -16,7 +16,7 @@ Thanks for considering a contribution to DevSections Studio.
 ## Run the browser suite
 
 ~~~bash
-npm install --no-save --no-package-lock playwright@1.56.1
+npm install --no-save --no-package-lock playwright@1.56.1 esbuild @vue/compiler-sfc svelte
 npx playwright install chromium
 node tests/browser-smoke.mjs
 ~~~
