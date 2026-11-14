@@ -7,17 +7,19 @@ The GitHub Actions workflow `.github/workflows/quality.yml` installs Chromium an
 The browser suite checks:
 - Exactly 750 catalogue entries across 15 categories.
 - Exactly 50 designs and 50 unique IDs per category.
+- Global template ID uniqueness.
+- One valid section root for every generated template.
 - Paginated library rendering (24 cards per page).
 - Category filtering and pagination.
 - Brand customiser preview and brand token updates.
 - Mobile and desktop viewport switching.
 - Template insertion into the page canvas.
-- Sanitisation of malicious imported project markup.
+- Sanitisation of malicious imported project markup, event handlers, unsafe URL schemes and CSS URL loads.
 - Static HTML, React, Next.js, Vue and Svelte ZIP archive integrity.
 - Local project persistence after reload.
 - Uncaught browser runtime errors.
 
-## Security checks in the application
+## Security controls in the application
 
 - Project imports are capped at 5 MB, 30 pages and 100 sections per page.
 - Imported section HTML is capped at 150 KB per section and sanitised.
@@ -26,6 +28,7 @@ The browser suite checks:
 - Event-handler attributes and active embedded content are removed.
 - URL schemes and CSS declarations are filtered.
 - Media references are capped at 100 entries and validated before use.
+- Imported form elements are flattened to prevent arbitrary form submission behaviour.
 
 ## Not covered by the browser smoke suite
 
