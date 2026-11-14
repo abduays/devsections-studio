@@ -173,7 +173,7 @@ The repository's Quality and security checks workflow runs a Chromium browser su
 To run the browser suite locally, install Node.js 22+, install Playwright and Chromium, then run:
 
 ~~~bash
-npm install --no-save --no-package-lock playwright@1.56.1
+npm install --no-save --no-package-lock playwright@1.56.1 esbuild @vue/compiler-sfc svelte
 npx playwright install chromium
 node tests/browser-smoke.mjs
 ~~~
