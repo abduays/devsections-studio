@@ -43,6 +43,19 @@
 .ds[data-layout="balanced"]{padding-left:0;padding-right:0}
 
 .library-pagination{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 4px;color:var(--muted);font-size:10px}.library-pagination button:disabled{opacity:.4;cursor:not-allowed}.template-list{content-visibility:auto;contain-intrinsic-size:900px}
+
+/* Responsive safety overrides: constrain high-specificity category grids inside the actual canvas container. */
+@container (max-width:850px){
+.ds.cat-services .service-grid,.ds.cat-features .feature-grid,.ds.cat-portfolio .portfolio-grid,.ds.cat-team .team-grid,.ds.cat-testimonials .quote-grid,.ds.cat-pricing .price-grid,.ds.cat-process .steps-grid,.ds.cat-stats .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.ds .wrap,.ds .grid,.ds .grid>*{min-width:0}
+.ds .nav-layout{flex-wrap:wrap;gap:14px}
+}
+@container (max-width:600px){
+.ds.cat-services .service-grid,.ds.cat-features .feature-grid,.ds.cat-portfolio .portfolio-grid,.ds.cat-team .team-grid,.ds.cat-testimonials .quote-grid,.ds.cat-pricing .price-grid,.ds.cat-process .steps-grid,.ds.cat-stats .stats-grid{grid-template-columns:1fr!important}
+.ds.cat-footer .footer-grid{grid-template-columns:1fr!important}
+.ds .nav-layout{align-items:flex-start}
+.ds h1,.ds h2,.ds h3,.ds p,.ds a{overflow-wrap:anywhere}
+}
 </style>
 </head>
 <body>
