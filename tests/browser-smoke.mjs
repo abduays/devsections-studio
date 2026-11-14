@@ -1,0 +1,108 @@
+import assert from 'node:assert/strict';
+import { createServer } from 'node:http';
+import { readFile } from 'node:fs/promises';
+import { mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { execFileSync } from 'node:child_process';
+import { chromium } from 'playwright';
+
+const html = await readFile(new URL('../index.html', import.meta.url));
+const server = createServer((req, res) => {
+  if (req.url === '/' || req.url === '/index.html') {
+    res.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' });
+    res.end(html);
+    return;
+  }
+  res.writeHead(404);
+  res.end('Not found');
+});
+await new Promise(resolve => server.listen(4173, '127.0.0.1', resolve));
+const temp = await mkdtemp(join(tmpdir(), 'devsections-smoke-'));
+const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
+const errors = [];
+try {
+  const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  page.on('pageerror', error => errors.push(error.message));
+  await page.goto('http://127.0.0.1:4173/', { waitUntil: 'load' });
+  await page.waitForFunction(() => window.DEVSECTIONS_STUDIO_VERSION === '2.2.0');
+
+  const audit = await page.evaluate(() => window.DEVSECTIONS_TEMPLATE_AUDIT);
+  assert.equal(audit.total, 750, 'catalogue should contain 750 designs');
+  assert.equal(audit.categories.length, 15, 'catalogue should contain 15 categories');
+  for (const category of audit.categories) {
+    assert.equal(category.count, 50, category.id + ' should contain 50 designs');
+    assert.equal(category.uniqueIds, 50, category.id + ' should have unique template IDs');
+  }
+
+  const initialCards = await page.locator('#templateList .template-card').count();
+  assert.equal(initialCards, 24, 'library should render one page of 24 cards, not all 750');
+  assert.match(await page.locator('.library-pagination').innerText(), /Page 1 of 32/);
+  await page.locator('.library-pagination button').last().click();
+  assert.equal(await page.locator('#templateList .template-card').count(), 24);
+  assert.match(await page.locator('.library-pagination').innerText(), /Page 2 of 32/);
+
+  const heroCategory = page.locator('#categoryList .cat-btn').filter({ hasText: 'Hero sections' });
+  await heroCategory.click();
+  assert.equal(await page.locator('#templateList .template-card').count(), 24);
+  assert.match(await page.locator('.library-pagination').innerText(), /Page 1 of 3/);
+
+  await page.locator('#panel-tabs button[data-panel="brand"], button[data-panel="brand"]').first().click().catch(async () => {
+    await page.locator('button[data-panel="brand"]').click();
+  });
+  await page.locator('#brandHex').fill('#ff0000');
+  assert.equal(await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--brand').trim()), '#ff0000');
+  assert.ok(await page.locator('#brandLivePreview .ds').count(), 'brand preview should render a real section');
+
+  await page.locator('button.device').filter({ hasText: 'Mobile' }).click();
+  assert.ok(await page.locator('#canvas.mobile').count(), 'mobile preview mode should activate');
+  await page.locator('button.device').filter({ hasText: 'Desktop' }).click();
+
+  await page.locator('#categoryList .cat-btn').filter({ hasText: 'Hero sections' }).click();
+  await page.locator('#templateList .template-card').first().locator('button.add').click();
+  assert.equal(await page.locator('#canvas .canvas-section').count(), 1, 'template should add to canvas');
+
+  const hostileProject = {
+    format: 'devsections-studio',
+    name: 'Security test',
+    pageId: 'page-test',
+    brand: { brand: '#6257e8', accent: '#16a394', ink: '#172033', surface: '#ffffff', font: 'Arial,sans-serif', radius: '14px' },
+    pages: [{
+      id: 'page-test', name: 'Security test', title: 'Security test page', slug: 'index',
+      sections: [{
+        id: 'section-test', templateId: 'hero-1', name: 'Imported section',
+        html: '<section class="ds"><h1>Safe text</h1><img src="https://example.com/a.jpg" onerror="window.__devsectionsPwned=1"><script>window.__devsectionsPwned=2</script><a href="javascript:window.__devsectionsPwned=3">bad link</a><iframe src="https://example.com"></iframe></section>'
+      }]
+    }]
+  };
+  await page.locator('#projectImport').setInputFiles({
+    name: 'hostile-project.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from(JSON.stringify(hostileProject))
+  });
+  await page.waitForFunction(() => document.querySelectorAll('#canvas .canvas-section').length === 1);
+  assert.equal(await page.locator('#canvas script, #canvas iframe, #canvas [onerror]').count(), 0, 'dangerous markup should be removed');
+  assert.equal(await page.locator('#canvas a[href^="javascript:"]').count(), 0, 'javascript URLs should be removed');
+  assert.equal(await page.evaluate(() => window.__devsectionsPwned), undefined, 'imported payload must not execute');
+
+  for (const format of ['html', 'react', 'next', 'vue', 'svelte']) {
+    await page.locator('#exportFormat').selectOption(format);
+    const downloadPromise = page.waitForEvent('download');
+    await page.locator('button.primary').click();
+    const download = await downloadPromise;
+    const path = join(temp, format + '.zip');
+    await download.saveAs(path);
+    const result = execFileSync('unzip', ['-t', path], { encoding: 'utf8' });
+    assert.match(result, /No errors detected/);
+  }
+
+  await page.reload({ waitUntil: 'load' });
+  await page.waitForFunction(() => window.DEVSECTIONS_STUDIO_VERSION === '2.2.0');
+  assert.equal(await page.locator('#canvas .canvas-section').count(), 1, 'saved project should reload');
+  assert.deepEqual(errors, [], 'browser should have no uncaught page errors');
+  console.log('PASS: 750-template catalogue, pagination, brand preview, responsive mode, template insertion, malicious import sanitisation, five ZIP exports, local save/reload, and browser runtime.');
+} finally {
+  await browser.close();
+  await new Promise(resolve => server.close(resolve));
+  await rm(temp, { recursive: true, force: true });
+}
