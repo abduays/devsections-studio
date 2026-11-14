@@ -183,6 +183,11 @@ try {
         const files = generated.filter(file => file.endsWith('.svelte'));
         assert.ok(files.length, 'Svelte export should contain route components');
         for (const file of files) compileSvelte(await readFile(file, 'utf8'), { filename: file, generate: 'client' });
+        const appShell = generated.find(file => file.endsWith(join('src', 'app.html')));
+        assert.ok(appShell, 'SvelteKit export should include src/app.html');
+        const shellSource = await readFile(appShell, 'utf8');
+        assert.match(shellSource, /%svelte\.head%/);
+        assert.match(shellSource, /%svelte\.body%/);
       }
       if (process.env.SKIP_FRAMEWORK_BUILDS !== '1') {
         console.log('Building generated ' + format + ' starter with production dependencies...');
