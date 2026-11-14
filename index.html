@@ -260,7 +260,7 @@ function makeTemplate(cat,v){
  const skin=DESIGN_SKINS[skinIndex],layout=DESIGN_LAYOUTS[layoutIndex];
  const id=cat+'-'+(v+1),baseName=base<6?d.names[base]:['Proof-led composition','Structured editorial','Featured content layout','Conversion-focused layout'][base-6],name=baseName+' · '+skin.name+' · '+layout.name;
  const markup=sectionMarkup(cat,base);
- return {id,cat,name,desc:d.desc,html:`<section class="ds cat-${cat} v${base+1}" data-template="${id}" data-skin="${skinIndex}" data-layout="${layout.css}" style="--ds-surface:${skin.bg};--ds-text:${skin.fg}">${markup}</section>`,tags:[cat,skin.name.toLowerCase(),layout.name.toLowerCase(),d.names[base].split(' ')[0].toLowerCase()]};
+ return {id,cat,name,desc:d.desc,html:`<section class="ds cat-${cat} v${base+1}" data-template="${id}" data-skin="${skinIndex}" data-layout="${layout.css}" style="--ds-surface:${skin.bg};--ds-text:${skin.fg}">${markup}</section>`,tags:[cat,skin.name.toLowerCase(),layout.name.toLowerCase(),baseName.split(' ')[0].toLowerCase()]};
 }
 CATEGORIES.slice(1).forEach(([cat])=>{for(let i=0;i<50;i++)TEMPLATES.push(makeTemplate(cat,i));});
 function page(){return STATE.pages.find(p=>p.id===STATE.pageId)||STATE.pages[0]}
