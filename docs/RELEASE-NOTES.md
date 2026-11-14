@@ -1,33 +1,37 @@
-# DevSections Studio 2.1 — Release notes
+# DevSections Studio 2.2 — Release notes
 
-## Catalogue expansion
+## Product quality and template library
 
-- Expanded the library to **750 design variants**.
-- Added **50 variants in each of 15 section categories**: Hero, Navigation, About, Services, Features, Portfolio, Testimonials, Pricing, Process, Team, Statistics, FAQs, Contact, Calls to action and Footers.
-- Each category now combines six base composition patterns with ten visual treatments and five layout treatments.
-- Added ten visual systems: Paper, Warm Ivory, Ice Blue, Lavender, Midnight, Graphite, Soft Coral, Sage, Cloud Gradient and Mint.
-- Added five layout treatments: Balanced, Centered, Narrow Editorial, Wide Canvas and Framed Panel.
-- Updated catalogue counts, page metadata and project documentation.
+- Expanded the library to exactly **750 designs**: 50 in each of 15 categories.
+- Each category now contains ten structural compositions, each offered in five visual themes.
+- Structural compositions use five layout treatments: Balanced, Centered, Narrow Editorial, Wide Canvas and Framed Panel.
+- Added new structural patterns across hero, navigation, about, services, features, portfolio, testimonials, pricing, process, team, statistics, FAQ, contact, CTA and footer categories.
+- Removed overlapping legacy template generators that created duplicate IDs and inflated catalogue counts.
+- Added library pagination (24 cards per page) to reduce initial DOM size and improve browsing performance.
+- Fixed category-grid and navigation overflow at tablet and mobile widths; added all-template responsive overflow regression checks.
 
-## Licensing
+## Security and privacy
 
-- Added the MIT License in the repository root.
-- Documented licence scope, third-party material exclusions and the fact that MIT does not require forks or hosted versions to remain free.
+- Added HTML sanitisation for imported and developer-edited section markup.
+- Removed script, iframe, object, embed, SVG and other active content from imported section markup.
+- Removed inline event handlers, unsafe URL schemes, form actions and unsafe CSS declarations from imported markup.
+- Added validation and size limits for project imports, identifiers, page counts, section counts, brand values and responsive overrides.
+- Validated browser-local project data before loading and media references before use.
+- Restricted remote image references to HTTPS (plus safe relative paths), applied no-referrer loading and capped the local image shelf.
+- Added a browser regression workflow that tests malicious project imports and unsafe CSS/URL handling.
+- Added a restrictive Content Security Policy to the editor and static HTML exports.
+- Pinned GitHub Actions to verified commit SHAs and enabled weekly Dependabot updates.
 
-## Retained
+## Editor and export checks
 
-- Brand customiser and actual template preview.
-- Beginner and Developer modes.
-- Section drag-and-drop, layers, multiple pages and project JSON.
-- Static HTML and React, Next.js, Vue and Svelte exports.
-- Local browser saving and no paid APIs or subscriptions.
+- Added browser checks for catalogue counts, unique IDs, template root markup, pagination, brand preview, responsive mode, template insertion and local persistence.
+- Added ZIP integrity checks for static HTML, React, Next.js, Vue and Svelte exports.
+- Updated application labels and documentation to version 2.2.
 
-## Compatibility and verification
+## Known security boundaries
 
-The template IDs remain category-prefixed and unique within the expanded catalogue. Existing saved projects should retain their stored section HTML; export a JSON backup before replacing a prior local application file.
+The editor's Developer mode is an HTML authoring feature. Sanitisation reduces risk in editor previews and exports but cannot guarantee that every custom HTML/CSS use is safe for every deployment context. Framework exports still use HTML insertion APIs to render section markup; only trusted, reviewed content should be deployed. The app is not a secure multi-user hosting platform.
 
-The catalogue expansion is generated from reusable base compositions and design-system variants. It is not 750 wholly independent structural layouts. Automated catalogue and browser checks should be completed against the committed version before treating it as a production release.
+## Verification
 
-## Known limitations
-
-No live hosting beyond static deployment, CMS, database, cloud collaboration, form delivery, ecommerce checkout or authentication. Full browser interaction and framework production builds require separate verification.
+The GitHub Actions browser workflow must pass on the release commit. Framework project dependencies are not installed by the editor itself; exported starter projects still require their own dependency installation and production builds.

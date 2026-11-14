@@ -9,8 +9,34 @@ desktop.ini
 *.swp
 *.swo
 
+# Dependencies and generated test output
+node_modules/
+playwright-report/
+test-results/
+coverage/
+
 # Temporary and backup files
 *.tmp
 *.bak
 *.log
 *.zip
+.env
+.env.*
+!.env.example
+
+# Secrets and private credentials
+.env
+.env.*
+!.env.example
+.secrets/
+.ssh/
+.aws/
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+credentials.json
+secrets.json
+service-account*.json

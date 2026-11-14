@@ -6,7 +6,7 @@ Build pages from a curated section library, establish a consistent visual identi
 
 [Open the live app](https://abduays.github.io/devsections-studio/) · [Report a bug](https://github.com/abduays/devsections-studio/issues/new) · [Request a feature](https://github.com/abduays/devsections-studio/issues/new)
 
-![Deployment](https://github.com/abduays/devsections-studio/actions/workflows/pages.yml/badge.svg)
+![Deployment](https://github.com/abduays/devsections-studio/actions/workflows/pages.yml/badge.svg) ![Quality checks](https://github.com/abduays/devsections-studio/actions/workflows/quality.yml/badge.svg)
 
 ---
 
@@ -18,7 +18,7 @@ It is a standalone browser application with a visual editing workflow, a reusabl
 
 **The project is free to use.** It does not require an account, subscription, paid API, backend service or build tool to open the editor.
 
-> **Project status:** Version 2.1 release candidate. Automated source and export checks have been recorded, but comprehensive cross-browser and production framework-build verification is still outstanding. See the [test report](docs/TEST-REPORT.md).
+> **Project status:** Version 2.2 release candidate. Automated source and export checks have been recorded, but comprehensive cross-browser and production framework-build verification is still outstanding. See the [test report](docs/TEST-REPORT.md).
 
 ## Product capabilities
 
@@ -39,6 +39,10 @@ It is a standalone browser application with a visual editing workflow, a reusabl
 | Website export | Static HTML ZIP |
 | Framework starters | React + Vite, Next.js, Vue + Vite and SvelteKit |
 | Runtime dependencies | No external JavaScript package is required to launch the editor |
+
+### How the 750-design catalogue is organised
+
+Each of the 15 categories contains ten distinct structural compositions, each offered in five visual themes. The compositions use a set of five layout treatments (balanced, centred, narrow editorial, wide canvas and framed panel). This gives 50 selectable designs per category. The catalogue is generated from reusable composition functions, not 750 separately hand-coded page components.
 
 ### What it is not
 
@@ -164,6 +168,16 @@ If an organisation policy or repository ruleset blocks GitHub Actions, an admini
 
 ## Development and quality checks
 
+The repository's Quality and security checks workflow runs a Chromium browser suite on pushes to the development branch and on pull requests targeting `main`. It verifies catalogue counts, pagination, brand preview, responsive mode, safe project import, browser persistence and ZIP export integrity.
+
+To run the browser suite locally, install Node.js 22+, install Playwright and Chromium, then run:
+
+~~~bash
+npm install --no-save --no-package-lock playwright@1.56.1 esbuild @vue/compiler-sfc svelte
+npx playwright install chromium
+node tests/browser-smoke.mjs
+~~~
+
 Before submitting a change:
 
 - Check the browser console for runtime errors.
@@ -189,9 +203,11 @@ The following are potential areas for future development; they should not be int
 
 Feature proposals and reproducible bug reports are welcome through [GitHub Issues](https://github.com/abduays/devsections-studio/issues).
 
-## Security
+## Security and privacy
 
-Please report suspected vulnerabilities privately where possible. See [SECURITY.md](SECURITY.md). Treat imported project data and generated HTML as untrusted, and review generated output before deploying it.
+See [SECURITY.md](SECURITY.md) for reporting guidance and the product's security boundaries. Imported project JSON and Developer-mode HTML are treated as untrusted input: the editor validates project structure, limits import sizes and sanitises markup before previewing or exporting it. This reduces risk but is not a guarantee that arbitrary custom markup is safe in every downstream environment.
+
+Projects and media references are stored in browser-local storage and are not encrypted or synchronised to a server. Do not store passwords, API keys, access tokens, customer records or confidential business data in projects. User-selected external image hosts can receive visitor request metadata when exported sites load those images. Review and trust all external assets before publishing.
 
 ## Licence and reuse
 

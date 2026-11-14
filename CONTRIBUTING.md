@@ -10,7 +10,16 @@ Thanks for considering a contribution to DevSections Studio.
 4. Preserve project import/export compatibility where practical.
 5. Test the app in current Chrome, Edge and Firefox.
 6. Test desktop, tablet and mobile layouts.
-7. Update the README and release notes when behaviour or setup changes.
+7. Run the browser regression suite when changing editor behaviour, imports or exports.
+8. Update the README, release notes and test report when behaviour or setup changes.
+
+## Run the browser suite
+
+~~~bash
+npm install --no-save --no-package-lock playwright@1.56.1 esbuild @vue/compiler-sfc svelte
+npx playwright install chromium
+node tests/browser-smoke.mjs
+~~~
 
 ## Pull requests
 
@@ -19,8 +28,9 @@ Include:
 - Steps to reproduce or test it.
 - Screenshots for visible UI changes, where useful.
 - Any known limitations or migration notes.
+- Test results and browser versions where relevant.
 
-Do not include secrets, API keys, private user projects or copyrighted assets without permission.
+Do not include secrets, API keys, private user projects, personal contact information or copyrighted assets without permission.
 
 ## Licence
 
