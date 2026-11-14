@@ -29,7 +29,7 @@ The browser suite checks:
 - Imported page and section IDs are validated.
 - Brand colours, font stacks, corner radii, style overrides and responsive settings are allowlisted.
 - Event-handler attributes and active embedded content are removed.
-- URL schemes and CSS declarations are filtered.
+- URL schemes and CSS declarations are filtered; remote images require HTTPS and protocol-relative URLs are rejected.
 - Media references are capped at 100 entries, validated before use and rejected if the stored shelf exceeds 1 MB.
 - Image loads use a no-referrer policy to avoid sending the editor page URL to remote image hosts.
 - Imported page slugs are made unique to prevent export file collisions.
