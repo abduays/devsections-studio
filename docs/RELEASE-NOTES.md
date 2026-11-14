@@ -1,6 +1,15 @@
 # DevSections Studio 2.2 — Release notes
 
-## Product quality and security work
+## Product quality and template library
+
+- Expanded the library to exactly **750 designs**: 50 in each of 15 categories.
+- Each category now contains ten structural compositions, each offered in five visual themes.
+- Structural compositions use five layout treatments: Balanced, Centered, Narrow Editorial, Wide Canvas and Framed Panel.
+- Added new structural patterns across hero, navigation, about, services, features, portfolio, testimonials, pricing, process, team, statistics, FAQ, contact, CTA and footer categories.
+- Removed overlapping legacy template generators that created duplicate IDs and inflated catalogue counts.
+- Added library pagination (24 cards per page) to reduce initial DOM size and improve browsing performance.
+
+## Security and privacy
 
 - Added HTML sanitisation for imported and developer-edited section markup.
 - Removed script, iframe, object, embed, SVG and other active content from imported section markup.
@@ -8,10 +17,13 @@
 - Added validation and size limits for project imports, identifiers, page counts, section counts, brand values and responsive overrides.
 - Validated browser-local project data before loading and media references before use.
 - Restricted image references to HTTP(S) or safe relative URLs and capped the local image shelf.
-- Removed the overlapping legacy template generators that created duplicate template IDs.
-- The section library now has exactly 50 generated variants per category and 750 in total.
-- Added pagination to the library to avoid rendering all 750 template cards at once.
-- Added browser regression checks for the catalogue, pagination, brand preview, responsive mode, malicious project imports, persistence and ZIP exports.
+- Added a browser regression workflow that tests malicious project imports and unsafe CSS/URL handling.
+
+## Editor and export checks
+
+- Added browser checks for catalogue counts, unique IDs, template root markup, pagination, brand preview, responsive mode, template insertion and local persistence.
+- Added ZIP integrity checks for static HTML, React, Next.js, Vue and Svelte exports.
+- Updated application labels and documentation to version 2.2.
 
 ## Known security boundaries
 
@@ -19,4 +31,4 @@ The editor's Developer mode is an HTML authoring feature. Sanitisation reduces r
 
 ## Verification
 
-The automated browser workflow must pass on the release commit. Framework project dependencies are not installed by the editor itself; the exported starter projects still require their own dependency installation and production builds.
+The GitHub Actions browser workflow must pass on the release commit. Framework project dependencies are not installed by the editor itself; exported starter projects still require their own dependency installation and production builds.
