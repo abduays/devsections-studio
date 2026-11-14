@@ -13,6 +13,7 @@ The browser suite checks:
 - Category filtering and pagination.
 - Brand customiser preview and brand token updates.
 - Mobile and desktop viewport switching.
+- Horizontal overflow scan across all 750 templates at 375px, 768px and 1440px container widths.
 - Template insertion into the page canvas.
 - Sanitisation of malicious imported project markup, event handlers, unsafe URL schemes and CSS URL loads.
 - Static HTML, React, Next.js, Vue and Svelte ZIP archive integrity.
