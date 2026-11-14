@@ -27,9 +27,18 @@ try {
   await page.goto('http://127.0.0.1:4173/', { waitUntil: 'load' });
   await page.waitForFunction(() => window.DEVSECTIONS_STUDIO_VERSION === '2.2.0');
 
-  const audit = await page.evaluate(() => window.DEVSECTIONS_TEMPLATE_AUDIT);
+  const audit = await page.evaluate(() => ({
+    ...window.DEVSECTIONS_TEMPLATE_AUDIT,
+    allIds: TEMPLATES.map(t => t.id),
+    validRoots: TEMPLATES.filter(t => {
+      const parsed = new DOMParser().parseFromString(t.html, 'text/html');
+      return parsed.body.children.length === 1 && parsed.body.firstElementChild?.tagName === 'SECTION';
+    }).length
+  }));
   assert.equal(audit.total, 750, 'catalogue should contain 750 designs');
   assert.equal(audit.categories.length, 15, 'catalogue should contain 15 categories');
+  assert.equal(new Set(audit.allIds).size, 750, 'all template IDs should be globally unique');
+  assert.equal(audit.validRoots, 750, 'all template variants should have one valid section root');
   for (const category of audit.categories) {
     assert.equal(category.count, 50, category.id + ' should contain 50 designs');
     assert.equal(category.uniqueIds, 50, category.id + ' should have unique template IDs');
@@ -70,7 +79,7 @@ try {
       id: 'page-test', name: 'Security test', title: 'Security test page', slug: 'index',
       sections: [{
         id: 'section-test', templateId: 'hero-1', name: 'Imported section',
-        html: '<section class="ds"><h1>Safe text</h1><img src="https://example.com/a.jpg" onerror="window.__devsectionsPwned=1"><script>window.__devsectionsPwned=2</script><a href="javascript:window.__devsectionsPwned=3">bad link</a><iframe src="https://example.com"></iframe></section>'
+        html: '<section class="ds"><h1>Safe text</h1><img src="https://example.com/a.jpg" onerror="window.__devsectionsPwned=1"><script>window.__devsectionsPwned=2</script><a href="javascript:window.__devsectionsPwned=3">bad link</a><iframe src="https://example.com"></iframe><div style="background-image:url(https://attacker.invalid/track)">unsafe CSS</div></section>'
       }]
     }]
   };
@@ -82,6 +91,7 @@ try {
   await page.waitForFunction(() => document.querySelector('#canvas h1')?.textContent === 'Safe text');
   assert.equal(await page.locator('#canvas script, #canvas iframe, #canvas [onerror]').count(), 0, 'dangerous markup should be removed');
   assert.equal(await page.locator('#canvas a[href^="javascript:"]').count(), 0, 'javascript URLs should be removed');
+  assert.equal(await page.locator('#canvas [style*="url("]').count(), 0, 'remote CSS URL loads should be removed');
   assert.equal(await page.evaluate(() => window.__devsectionsPwned), undefined, 'imported payload must not execute');
 
   for (const format of ['html', 'react', 'next', 'vue', 'svelte']) {
