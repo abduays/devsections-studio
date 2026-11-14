@@ -1,15 +1,18 @@
-# DevSections Studio 2.0 — Release notes
+# DevSections Studio 2.1 — Release notes
 
-## New
+## Catalogue expansion
 
-- Expanded the section library from 90 to 210 designs.
-- Added 10 complete multi-page website starter kits.
-- Added double-click element selection and quick controls for text, text colour, background and font size.
-- Added image URL replacement and alt-text fields for selected placeholders.
-- Added a local image-reference shelf for saving reusable image URLs.
-- Added tablet/mobile section-level overrides and static HTML export support for those rules.
-- Added a local SEO and accessibility check panel.
-- Added keyboard shortcuts for undo, redo, save and delete.
+- Expanded the library to **750 design variants**.
+- Added **50 variants in each of 15 section categories**: Hero, Navigation, About, Services, Features, Portfolio, Testimonials, Pricing, Process, Team, Statistics, FAQs, Contact, Calls to action and Footers.
+- Each category now combines six base composition patterns with ten visual treatments and five layout treatments.
+- Added ten visual systems: Paper, Warm Ivory, Ice Blue, Lavender, Midnight, Graphite, Soft Coral, Sage, Cloud Gradient and Mint.
+- Added five layout treatments: Balanced, Centered, Narrow Editorial, Wide Canvas and Framed Panel.
+- Updated catalogue counts, page metadata and project documentation.
+
+## Licensing
+
+- Added the MIT License in the repository root.
+- Documented licence scope, third-party material exclusions and the fact that MIT does not require forks or hosted versions to remain free.
 
 ## Retained
 
@@ -19,10 +22,12 @@
 - Static HTML and React, Next.js, Vue and Svelte exports.
 - Local browser saving and no paid APIs or subscriptions.
 
-## Compatibility
+## Compatibility and verification
 
-The existing project data format and browser storage key are retained. Export a JSON backup before replacing the previous app file.
+The template IDs remain category-prefixed and unique within the expanded catalogue. Existing saved projects should retain their stored section HTML; export a JSON backup before replacing a prior local application file.
+
+The catalogue expansion is generated from reusable base compositions and design-system variants. It is not 750 wholly independent structural layouts. Automated catalogue and browser checks should be completed against the committed version before treating it as a production release.
 
 ## Known limitations
 
-No live hosting, CMS, database, cloud collaboration, form delivery, ecommerce checkout or authentication. Full browser interaction and framework production builds remain unverified in the current build environment.
+No live hosting beyond static deployment, CMS, database, cloud collaboration, form delivery, ecommerce checkout or authentication. Full browser interaction and framework production builds require separate verification.
