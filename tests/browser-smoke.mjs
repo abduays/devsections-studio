@@ -1,11 +1,14 @@
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
-import { readFile } from 'node:fs/promises';
+import { readFile, mkdir, readdir } from 'node:fs/promises';
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { chromium } from 'playwright';
+import { transform } from 'esbuild';
+import { parse as parseVue, compileTemplate } from '@vue/compiler-sfc';
+import { compile as compileSvelte } from 'svelte/compiler';
 
 const html = await readFile(new URL('../index.html', import.meta.url));
 const source = html.toString('utf8');
@@ -121,6 +124,42 @@ try {
     await download.saveAs(path);
     const result = execFileSync('unzip', ['-t', path], { encoding: 'utf8' });
     assert.match(result, /No errors detected/);
+    if (format !== 'html') {
+      const outputDir = join(temp, format + '-source');
+      await mkdir(outputDir, { recursive: true });
+      execFileSync('unzip', ['-q', path, '-d', outputDir]);
+      const packageJson = JSON.parse(await readFile(join(outputDir, 'package.json'), 'utf8'));
+      assert.ok(packageJson.dependencies || packageJson.devDependencies, format + ' package manifest should declare dependencies');
+      const walk = async dir => {
+        const entries = await readdir(dir, { withFileTypes: true });
+        const found = [];
+        for (const entry of entries) {
+          const full = join(dir, entry.name);
+          if (entry.isDirectory()) found.push(...await walk(full));
+          else found.push(full);
+        }
+        return found;
+      };
+      const generated = await walk(outputDir);
+      if (format === 'react' || format === 'next') {
+        const jsxFiles = generated.filter(file => file.endsWith('.jsx'));
+        assert.ok(jsxFiles.length, format + ' export should contain JSX files');
+        for (const file of jsxFiles) await transform(await readFile(file, 'utf8'), { loader: 'jsx', target: 'es2022' });
+      } else if (format === 'vue') {
+        const file = generated.find(file => file.endsWith('.vue'));
+        assert.ok(file, 'Vue export should contain an SFC');
+        const source = await readFile(file, 'utf8');
+        const parsed = parseVue(source, { filename: file });
+        assert.deepEqual(parsed.errors, [], 'Vue SFC should parse');
+        const compiled = compileTemplate({ source: parsed.descriptor.template.content, filename: file, id: 'devsections-vue-smoke' });
+        assert.deepEqual(compiled.errors, [], 'Vue template should compile');
+        if (parsed.descriptor.scriptSetup) await transform(parsed.descriptor.scriptSetup.content, { loader: 'js', target: 'es2022' });
+      } else if (format === 'svelte') {
+        const files = generated.filter(file => file.endsWith('.svelte'));
+        assert.ok(files.length, 'Svelte export should contain route components');
+        for (const file of files) compileSvelte(await readFile(file, 'utf8'), { filename: file, generate: 'client' });
+      }
+    }
   }
 
   await page.reload({ waitUntil: 'load' });
