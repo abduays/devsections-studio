@@ -18,13 +18,15 @@ It is a standalone browser application with a visual editing workflow, a reusabl
 
 **The project is free to use.** It does not require an account, subscription, paid API, backend service or build tool to open the editor.
 
-> **Project status:** Version 2.0 release candidate. Automated source and export checks have been recorded, but comprehensive cross-browser and production framework-build verification is still outstanding. See the [test report](docs/TEST-REPORT.md).
+> **Project status:** Version 2.1 release candidate. Automated source and export checks have been recorded, but comprehensive cross-browser and production framework-build verification is still outstanding. See the [test report](docs/TEST-REPORT.md).
 
 ## Product capabilities
 
+**Catalogue size:** 750 design variants, with 50 entries in each of the 15 section categories. Each category combines six base composition patterns with ten visual treatments and five layout treatments. These are curated combinations of structural patterns and design systems, not 750 independently hand-coded wireframes.
+
 | Area | Included |
 |---|---|
-| Section library | 210 section designs across 15 categories |
+| Section library | 750 section designs across 15 categories (50 per category) |
 | Website starters | 10 multi-page starter kits |
 | Brand system | Shared colour, typography and corner-style settings |
 | Brand preview | Preview brand settings against actual template designs |
@@ -193,7 +195,7 @@ Please report suspected vulnerabilities privately where possible. See [SECURITY.
 
 ## Licence and reuse
 
-**A project licence has not yet been selected.** The repository includes [LICENCE-DECISION.md](LICENCE-DECISION.md) to make that status explicit. Until a licence is added, do not assume that the source code, template designs or other project materials may be redistributed, modified or reused by third parties. The intention to keep the product free does not itself grant an open-source licence.
+DevSections Studio is released under the [MIT License](LICENSE). The licence permits use, modification, redistribution and commercial reuse subject to preserving the copyright and licence notice. See [LICENCE-DECISION.md](LICENCE-DECISION.md) for scope and important details: MIT does not require third-party forks or hosted versions to remain free of charge. The official DevSections Studio project is intended to remain free.
 
 ---
 
