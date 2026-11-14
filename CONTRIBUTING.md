@@ -21,3 +21,7 @@ Include:
 - Any known limitations or migration notes.
 
 Do not include secrets, API keys, private user projects or copyrighted assets without permission.
+
+## Licence
+
+By submitting a contribution, you agree that your contribution is provided under the repository's MIT License. Do not submit material that you do not have permission to license under these terms. Preserve third-party notices where applicable.
