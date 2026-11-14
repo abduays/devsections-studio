@@ -8,6 +8,7 @@
 - Added new structural patterns across hero, navigation, about, services, features, portfolio, testimonials, pricing, process, team, statistics, FAQ, contact, CTA and footer categories.
 - Removed overlapping legacy template generators that created duplicate IDs and inflated catalogue counts.
 - Added library pagination (24 cards per page) to reduce initial DOM size and improve browsing performance.
+- Fixed category-grid and navigation overflow at tablet and mobile widths; added all-template responsive overflow regression checks.
 
 ## Security and privacy
 
