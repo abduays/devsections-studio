@@ -40,6 +40,10 @@ It is a standalone browser application with a visual editing workflow, a reusabl
 | Framework starters | React + Vite, Next.js, Vue + Vite and SvelteKit |
 | Runtime dependencies | No external JavaScript package is required to launch the editor |
 
+### How the 750-design catalogue is organised
+
+Each of the 15 categories contains ten distinct structural compositions, each offered in five visual themes. The compositions use a set of five layout treatments (balanced, centred, narrow editorial, wide canvas and framed panel). This gives 50 selectable designs per category. The catalogue is generated from reusable composition functions, not 750 separately hand-coded page components.
+
 ### What it is not
 
 DevSections Studio is not currently a hosted website platform or a complete replacement for a production CMS. It does not provide cloud collaboration, user accounts, a database, managed hosting, payment processing, ecommerce checkout, email delivery or form submission services. Template forms are presentation examples until connected to a service.
