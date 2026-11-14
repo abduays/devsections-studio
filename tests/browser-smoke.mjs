@@ -39,6 +39,11 @@ try {
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('http://127.0.0.1:4173/', { waitUntil: 'load' });
   await page.waitForFunction(() => window.DEVSECTIONS_STUDIO_VERSION === '2.2.0');
+  const urlChecks = await page.evaluate(() => ({ httpImage: safeUrl('http://example.com/image.jpg', 'src'), httpsImage: safeUrl('https://example.com/image.jpg', 'src'), javascriptLink: safeUrl('javascript:alert(1)', 'href'), protocolRelative: safeUrl('//example.com/image.jpg', 'src') }));
+  assert.equal(urlChecks.httpImage, '', 'remote HTTP images should be rejected');
+  assert.ok(urlChecks.httpsImage, 'HTTPS images should be accepted');
+  assert.equal(urlChecks.javascriptLink, '', 'javascript URLs should be rejected');
+  assert.equal(urlChecks.protocolRelative, '', 'protocol-relative URLs should be rejected');
 
   const audit = await page.evaluate(() => ({
     ...window.DEVSECTIONS_TEMPLATE_AUDIT,
