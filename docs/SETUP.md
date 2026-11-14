@@ -26,7 +26,7 @@ npx playwright install chromium
 node tests/browser-smoke.mjs
 ~~~
 
-The tests start a local static server, launch Chromium, exercise editor features, import a hostile test project and verify all five export ZIP archives.
+The tests start a local static server, launch the selected browser, exercise editor features, import a hostile test project and verify all five export ZIP archives. Set `BROWSER=chromium`, `BROWSER=firefox` or `BROWSER=webkit` to select the browser. The Chromium run also installs dependencies and performs production builds for the generated React, Next.js, Vue and SvelteKit starters.
 
 ## GitHub Pages deployment
 
