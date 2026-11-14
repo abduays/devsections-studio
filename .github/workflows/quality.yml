@@ -2,7 +2,7 @@ name: Quality and security checks
 
 on:
   push:
-    branches: ["main", "quality-security-hardening"]
+    branches: ["main", "quality-security-hardening", "release-verification-complete"]
   pull_request:
     branches: ["main"]
   workflow_dispatch:
@@ -16,8 +16,13 @@ concurrency:
 
 jobs:
   browser-quality:
+    name: Browser regression (${{ matrix.browser }})
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
     steps:
       - name: Check out repository
         uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
@@ -27,11 +32,14 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Install temporary browser-test dependency
+      - name: Install temporary browser-test dependencies
         run: npm install --no-save --no-package-lock playwright@1.56.1 esbuild @vue/compiler-sfc svelte
 
-      - name: Install Chromium
-        run: npx playwright install --with-deps chromium
+      - name: Install browser
+        run: npx playwright install --with-deps ${{ matrix.browser }}
 
-      - name: Run browser and export regression tests
+      - name: Run browser and framework export checks
+        env:
+          BROWSER: ${{ matrix.browser }}
+          SKIP_FRAMEWORK_BUILDS: ${{ matrix.browser != 'chromium' && '1' || '0' }}
         run: node tests/browser-smoke.mjs
