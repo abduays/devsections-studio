@@ -21,13 +21,15 @@ The browser suite checks:
 
 ## Security controls in the application
 
-- Project imports are capped at 5 MB, 30 pages and 100 sections per page.
+- Project imports are capped at 5 MB, 30 pages, 100 sections per page, 300 sections total and 4 MB of section HTML.
 - Imported section HTML is capped at 150 KB per section and sanitised.
 - Imported page and section IDs are validated.
 - Brand colours, font stacks, corner radii, style overrides and responsive settings are allowlisted.
 - Event-handler attributes and active embedded content are removed.
 - URL schemes and CSS declarations are filtered.
-- Media references are capped at 100 entries and validated before use.
+- Media references are capped at 100 entries, validated before use and rejected if the stored shelf exceeds 1 MB.
+- Image loads use a no-referrer policy to avoid sending the editor page URL to remote image hosts.
+- Imported page slugs are made unique to prevent export file collisions.
 - Imported form elements are flattened to prevent arbitrary form submission behaviour.
 
 ## Not covered by the browser smoke suite
