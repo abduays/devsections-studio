@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#101827"><meta name="application-name" content="DevSections Studio 2.0"><meta name="description" content="Free local-first visual website builder with 210+ section designs, full-site starters and responsive editing.">
+<meta name="theme-color" content="#101827"><meta name="application-name" content="DevSections Studio 2.0"><meta name="description" content="Free local-first visual website builder with 750 section designs, full-site starters and responsive editing.">
 <title>DevSections Studio 2.0 — Free Website Builder</title>
 <style>
 :root{--brand:#6257e8;--brand-soft:#eeecff;--brand-deep:#4338ca;--accent:#16a394;--ink:#172033;--muted:#697386;--surface:#fff;--canvas:#f3f5f9;--line:#e3e7ef;--radius:14px;--font:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;--shadow:0 8px 30px rgba(20,30,55,.08)}
@@ -31,6 +31,16 @@
 /* Studio 2.0 additions */
 .v2-toolbar{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.v2-chip{border:1px solid var(--line);border-radius:7px;padding:6px 8px;background:#fff;font-size:10px}.v2-section-tools{display:flex;gap:5px;flex-wrap:wrap}.v2-field-note{font-size:9px;color:#7b8493;line-height:1.45}.element-selected{outline:2px dashed #ef7b36!important;outline-offset:3px;cursor:text}.canvas-frame.mobile .ds h1{font-size:clamp(30px,9cqi,42px)}.canvas-frame.mobile .ds h2{font-size:clamp(25px,7cqi,34px)}.canvas-frame.mobile .ds .wrap{width:calc(100% - 32px)}.canvas-frame.tablet .ds .wrap{width:calc(100% - 40px)}
 
+
+/* Design-system variants: 50 curated combinations per section category. */
+.ds[data-skin]{background:var(--ds-surface)!important;color:var(--ds-text)!important;}
+.ds[data-skin] p,.ds[data-skin] .muted{color:color-mix(in srgb,var(--ds-text) 74%,transparent)!important;}
+.ds[data-skin] .card{background:color-mix(in srgb,var(--ds-surface) 88%,var(--ds-text) 4%)!important;border-color:color-mix(in srgb,var(--ds-text) 15%,transparent)!important;}
+.ds[data-layout="centered"]{text-align:center}.ds[data-layout="centered"] .wrap{max-width:920px}.ds[data-layout="centered"] .section-intro{margin-left:auto;margin-right:auto}.ds[data-layout="centered"] .actions,.ds[data-layout="centered"] .footer-links{justify-content:center}
+.ds[data-layout="narrow"] .wrap{max-width:820px}.ds[data-layout="narrow"]{padding-top:58px!important;padding-bottom:58px!important}
+.ds[data-layout="wide"] .wrap{max-width:1320px}.ds[data-layout="wide"]{padding-top:96px!important;padding-bottom:96px!important}.ds[data-layout="wide"] .grid{gap:28px}
+.ds[data-layout="framed"]{width:calc(100% - 40px);max-width:1440px;margin:20px auto;border:1px solid color-mix(in srgb,var(--ds-text) 18%,transparent);border-radius:24px;box-shadow:0 18px 50px rgba(20,30,55,.10);overflow:hidden;padding-top:24px!important;padding-bottom:24px!important}
+.ds[data-layout="balanced"]{padding-left:0;padding-right:0}
 </style>
 </head>
 <body>
@@ -95,8 +105,33 @@ case'cta':return [`<div class="wrap"><span class="eyebrow">Your next step</span>
 case'footer':return [`<div class="wrap"><div class="footer-grid"><div><h3>Northstar<span class="accent">.</span></h3><p>${desc}</p></div>${['Company','Explore','Connect'].map(x=>`<div><strong>${x}</strong>${items.map(i=>`<a href="#">${i}</a>`).join('')}</div>`).join('')}</div><div class="copyright">© 2026 Northstar Studio. All rights reserved.</div></div>`,`<div class="wrap"><div class="footer-grid"><div><h3>Stay in the loop</h3><p>Occasional notes, useful ideas and studio updates.</p><input placeholder="Email address" aria-label="Email address"></div><div><strong>Explore</strong>${items.map(i=>`<a href="#">${i}</a>`).join('')}</div></div><div class="copyright">© 2026 Northstar Studio.</div></div>`,`<div class="wrap"><div class="footer-grid"><div><h3>Northstar Studio</h3><p>${desc}</p></div><div><strong>Links</strong>${items.map(i=>`<a href="#">${i}</a>`).join('')}</div><div><strong>Social</strong><a href="#">Instagram</a><a href="#">LinkedIn</a></div></div><div class="copyright">© 2026 Northstar Studio.</div></div>`,`<div class="wrap"><h3>Northstar Studio</h3><p>${desc}</p><div class="footer-links">${items.map(i=>`<a href="#">${i}</a>`).join('')}</div><div class="copyright">© 2026 Northstar Studio.</div></div>`,`<div class="wrap"><div class="footer-grid"><div><span class="eyebrow" style="color:#a9a2ff">Make it matter</span><h2>Good work starts with a conversation.</h2><p>${desc}</p></div><div><strong>Company</strong>${items.map(i=>`<a href="#">${i}</a>`).join('')}</div><div><strong>Contact</strong><a href="#">hello@example.com</a><a href="#">LinkedIn</a></div></div><div class="copyright">© 2026 Northstar Studio.</div></div>`,`<div class="wrap"><div class="footer-grid"><div><h3>Northstar.</h3><p>${desc}</p></div><div><strong>Quick links</strong>${items.map(i=>`<a href="#">${i}</a>`).join('')}</div></div><div class="copyright">© 2026 Northstar Studio.</div></div>`][v];
 }
 }
-function makeTemplate(cat,v){const d=CONTENT[cat],id=cat+'-'+(v+1);return {id,cat,name:d.names[v],desc:d.desc,html:`<section class="ds cat-${cat} v${v+1}" data-template="${id}">${sectionMarkup(cat,v)}</section>`,tags:[cat,d.names[v].split(' ')[0].toLowerCase(),['clean','editorial','bold','minimal','modern','classic'][v]]};}
-CATEGORIES.slice(1).forEach(([cat])=>{for(let i=0;i<6;i++)TEMPLATES.push(makeTemplate(cat,i));});
+const DESIGN_SKINS=[
+{name:'Paper',bg:'#ffffff',fg:'#172033'},
+{name:'Warm ivory',bg:'#faf5eb',fg:'#30291f'},
+{name:'Ice blue',bg:'#edf5ff',fg:'#172b45'},
+{name:'Lavender',bg:'#f1efff',fg:'#292344'},
+{name:'Midnight',bg:'#111827',fg:'#f8fafc'},
+{name:'Graphite',bg:'#252a35',fg:'#f8fafc'},
+{name:'Soft coral',bg:'#fff0eb',fg:'#44241e'},
+{name:'Sage',bg:'#edf5ef',fg:'#20352a'},
+{name:'Cloud gradient',bg:'linear-gradient(135deg,#edf4ff 0%,#f3efff 55%,#fff3ed 100%)',fg:'#20283a'},
+{name:'Mint',bg:'#e9f8f3',fg:'#173b35'}
+];
+const DESIGN_LAYOUTS=[
+{name:'Balanced',css:'balanced'},
+{name:'Centered',css:'centered'},
+{name:'Narrow editorial',css:'narrow'},
+{name:'Wide canvas',css:'wide'},
+{name:'Framed panel',css:'framed'}
+];
+function makeTemplate(cat,v){
+ const d=CONTENT[cat],base=v%6,skinIndex=Math.floor(v/5),layoutIndex=v%5;
+ const skin=DESIGN_SKINS[skinIndex],layout=DESIGN_LAYOUTS[layoutIndex];
+ const id=cat+'-'+(v+1),name=d.names[base]+' · '+skin.name+' · '+layout.name;
+ const markup=sectionMarkup(cat,base);
+ return {id,cat,name,desc:d.desc,html:`<section class="ds cat-${cat} v${base+1}" data-template="${id}" data-skin="${skinIndex}" data-layout="${layout.css}" style="--ds-surface:${skin.bg};--ds-text:${skin.fg}">${markup}</section>`,tags:[cat,skin.name.toLowerCase(),layout.name.toLowerCase(),d.names[base].split(' ')[0].toLowerCase()]};
+}
+CATEGORIES.slice(1).forEach(([cat])=>{for(let i=0;i<50;i++)TEMPLATES.push(makeTemplate(cat,i));});
 function page(){return STATE.pages.find(p=>p.id===STATE.pageId)||STATE.pages[0]}
 function notify(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(notify.timer);notify.timer=setTimeout(()=>t.classList.remove('show'),2200)}
 function showPanel(id,btn){document.querySelectorAll('.panel').forEach(x=>x.classList.toggle('active',x.id==='panel-'+id));document.querySelectorAll('.panel-tabs button').forEach(x=>x.classList.toggle('active',x.dataset.panel===id));if(id==='pages')renderPages();if(id==='library')renderLibrary();if(id==='layers')renderLayers()}
@@ -281,7 +316,7 @@ init();
   document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&!e.shiftKey&&e.key.toLowerCase()==='z'){e.preventDefault();undo();}else if((e.ctrlKey||e.metaKey)&&(e.key.toLowerCase()==='y'||(e.shiftKey&&e.key.toLowerCase()==='z'))){e.preventDefault();redo();}else if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault();saveProject(true);}else if(e.key==='Delete'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)&&STATE.selected){e.preventDefault();removeSection(STATE.selected);}});
   // Add release metadata and refresh initialised app after all additions are registered.
   window.addEventListener('load',()=>{renderLibrary();renderPages();renderCanvas();renderProperties();renderMedia();renderResponsiveLive();});
-  window.DEVSECTIONS_STUDIO_VERSION='2.0.0';window.DEVSECTIONS_TEMPLATE_COUNT=TEMPLATES.length;
+  window.DEVSECTIONS_STUDIO_VERSION='2.1.0';window.DEVSECTIONS_TEMPLATE_COUNT=TEMPLATES.length;
 })();
 </script>
 
