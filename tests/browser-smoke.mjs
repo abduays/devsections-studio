@@ -8,6 +8,16 @@ import { execFileSync } from 'node:child_process';
 import { chromium } from 'playwright';
 
 const html = await readFile(new URL('../index.html', import.meta.url));
+const source = html.toString('utf8');
+assert.match(source, /function sanitizeMarkup/);
+assert.match(source, /function validateProjectData/);
+assert.doesNotMatch(source, /\\beval\\s*\\(/, 'application source must not use eval');
+assert.doesNotMatch(source, /new\\s+Function\\s*\\(/, 'application source must not construct dynamic functions');
+assert.doesNotMatch(source, /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/);
+assert.doesNotMatch(source, /AKIA[0-9A-Z]{16}/);
+assert.doesNotMatch(source, /gh[pousr]_[A-Za-z0-9_]{20,}/);
+const foundEmails = source.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}/gi) || [];
+assert.ok(foundEmails.every(address => address.toLowerCase().endsWith('@example.com')), 'only reserved example.com placeholder addresses may appear in app source');
 const server = createServer((req, res) => {
   if (req.url === '/' || req.url === '/index.html') {
     res.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' });
@@ -33,12 +43,19 @@ try {
     validRoots: TEMPLATES.filter(t => {
       const parsed = new DOMParser().parseFromString(t.html, 'text/html');
       return parsed.body.children.length === 1 && parsed.body.firstElementChild?.tagName === 'SECTION';
-    }).length
+    }).length,
+    structuralPatterns: CATEGORIES.slice(1).map(([id]) => ({
+      id,
+      count: new Set(TEMPLATES.filter(t => t.cat === id).map(t => t.name.split(' · ')[0])).size
+    }))
   }));
   assert.equal(audit.total, 750, 'catalogue should contain 750 designs');
   assert.equal(audit.categories.length, 15, 'catalogue should contain 15 categories');
   assert.equal(new Set(audit.allIds).size, 750, 'all template IDs should be globally unique');
   assert.equal(audit.validRoots, 750, 'all template variants should have one valid section root');
+  for (const structure of audit.structuralPatterns) {
+    assert.equal(structure.count, 10, structure.id + ' should have ten distinct structural compositions');
+  }
   for (const category of audit.categories) {
     assert.equal(category.count, 50, category.id + ' should contain 50 designs');
     assert.equal(category.uniqueIds, 50, category.id + ' should have unique template IDs');
