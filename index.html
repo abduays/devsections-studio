@@ -307,7 +307,7 @@ init();
   document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&!e.shiftKey&&e.key.toLowerCase()==='z'){e.preventDefault();undo();}else if((e.ctrlKey||e.metaKey)&&(e.key.toLowerCase()==='y'||(e.shiftKey&&e.key.toLowerCase()==='z'))){e.preventDefault();redo();}else if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault();saveProject(true);}else if(e.key==='Delete'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)&&STATE.selected){e.preventDefault();removeSection(STATE.selected);}});
   // Add release metadata and refresh initialised app after all additions are registered.
   window.addEventListener('load',()=>{renderLibrary();renderPages();renderCanvas();renderProperties();renderMedia();renderResponsiveLive();});
-  window.DEVSECTIONS_STUDIO_VERSION='2.2.0';window.DEVSECTIONS_TEMPLATE_COUNT=TEMPLATES.length;window.DEVSECTIONS_CATEGORY_COUNT=CATEGORIES.length-1;
+  window.DEVSECTIONS_STUDIO_VERSION='2.2.0';window.DEVSECTIONS_TEMPLATE_COUNT=TEMPLATES.length;window.DEVSECTIONS_CATEGORY_COUNT=CATEGORIES.length-1;window.DEVSECTIONS_TEMPLATE_AUDIT={total:TEMPLATES.length,categories:CATEGORIES.slice(1).map(([id])=>({id,count:TEMPLATES.filter(t=>t.cat===id).length,uniqueIds:new Set(TEMPLATES.filter(t=>t.cat===id).map(t=>t.id)).size}))};
 })();
 </script>
 
