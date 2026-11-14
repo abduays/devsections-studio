@@ -41,6 +41,13 @@ try {
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('http://127.0.0.1:4173/', { waitUntil: 'load' });
   await page.waitForFunction(() => window.DEVSECTIONS_STUDIO_VERSION === '2.2.0');
+  await page.addScriptTag({ path: join(process.cwd(), 'node_modules', 'axe-core', 'axe.min.js') });
+  const initialA11y = await page.evaluate(async () => {
+    const result = await axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] } });
+    return result.violations.map(v => ({ id: v.id, impact: v.impact, description: v.description, nodes: v.nodes.map(n => ({ target: n.target, html: n.html, summary: n.failureSummary })) }));
+  });
+  console.log('ACCESSIBILITY INITIAL AUDIT: ' + JSON.stringify(initialA11y));
+  assert.equal(initialA11y.filter(v => v.impact === 'critical' || v.impact === 'serious').length, 0, 'initial editor must have no serious or critical automated WCAG violations');
   const urlChecks = await page.evaluate(() => ({ httpImage: safeUrl('http://example.com/image.jpg', 'src'), httpsImage: safeUrl('https://example.com/image.jpg', 'src'), javascriptLink: safeUrl('javascript:alert(1)', 'href'), protocolRelative: safeUrl('//example.com/image.jpg', 'src') }));
   assert.equal(urlChecks.httpImage, '', 'remote HTTP images should be rejected');
   assert.ok(urlChecks.httpsImage, 'HTTPS images should be accepted');
@@ -115,6 +122,12 @@ try {
   await page.locator('#categoryList .cat-btn').filter({ hasText: 'Hero sections' }).click();
   await page.locator('#templateList .template-card').first().locator('button.add').click();
   assert.equal(await page.locator('#canvas .canvas-section').count(), 1, 'template should add to canvas');
+  const canvasA11y = await page.evaluate(async () => {
+    const result = await axe.run(document.querySelector('#canvas'), { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] } });
+    return result.violations.map(v => ({ id: v.id, impact: v.impact, description: v.description, nodes: v.nodes.length }));
+  });
+  console.log('INSERTED CANVAS ACCESSIBILITY AUDIT: ' + JSON.stringify(canvasA11y));
+  assert.equal(canvasA11y.filter(v => v.impact === 'critical' || v.impact === 'serious').length, 0, 'inserted canvas must have no serious or critical automated WCAG violations');
 
   const hostileProject = {
     format: 'devsections-studio',
