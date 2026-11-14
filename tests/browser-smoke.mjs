@@ -44,7 +44,7 @@ try {
   await page.addScriptTag({ path: join(process.cwd(), 'node_modules', 'axe-core', 'axe.min.js') });
   const initialA11y = await page.evaluate(async () => {
     const result = await axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] } });
-    return result.violations.map(v => ({ id: v.id, impact: v.impact, description: v.description, nodes: v.nodes.length }));
+    return result.violations.map(v => ({ id: v.id, impact: v.impact, description: v.description, nodes: v.nodes.map(n => ({ target: n.target, html: n.html, summary: n.failureSummary })) }));
   });
   console.log('ACCESSIBILITY INITIAL AUDIT: ' + JSON.stringify(initialA11y));
   assert.equal(initialA11y.filter(v => v.impact === 'critical' || v.impact === 'serious').length, 0, 'initial editor must have no serious or critical automated WCAG violations');
