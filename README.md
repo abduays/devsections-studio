@@ -18,7 +18,7 @@ It is a standalone browser application with a visual editing workflow, a reusabl
 
 **The project is free to use.** It does not require an account, subscription, paid API, backend service or build tool to open the editor.
 
-> **Project status:** Version 2.2. Chromium, Firefox and WebKit regression checks, framework production builds and automated axe-core accessibility screening are run by GitHub Actions. Manual accessibility, live deployment and independent security review remain separate assurance tasks. See the [test report](docs/TEST-REPORT.md).
+> **Project status:** Version 2.2. Chromium, Firefox and WebKit regression checks, framework production builds and axe-core accessibility screening are run by GitHub Actions. GitHub Pages deployment is confirmed successful. Manual accessibility and independent penetration testing remain separate assurance tasks; main branch protection still needs to be enabled. See the [test report](docs/TEST-REPORT.md).
 
 ## Product capabilities
 
