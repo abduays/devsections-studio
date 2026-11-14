@@ -16,6 +16,9 @@ The browser suite checks:
 - Template insertion into the page canvas.
 - Sanitisation of malicious imported project markup, event handlers, unsafe URL schemes and CSS URL loads.
 - Static HTML, React, Next.js, Vue and Svelte ZIP archive integrity.
+- React and Next.js JSX parsing, Vue single-file component parsing/template compilation, and Svelte component compilation.
+- Source scan for common credential patterns, private-key blocks, dynamic code execution and non-placeholder email addresses.
+- Content Security Policy and no-referrer metadata.
 - Local project persistence after reload.
 - Uncaught browser runtime errors.
 
