@@ -49,6 +49,7 @@ try {
       count: new Set(TEMPLATES.filter(t => t.cat === id).map(t => t.name.split(' · ')[0])).size
     }))
   }));
+  if (audit.total !== 750) console.error('Catalogue diagnostic:', await page.evaluate(() => ({version:window.DEVSECTIONS_STUDIO_VERSION,count:window.DEVSECTIONS_TEMPLATE_COUNT,categories:CATEGORIES.length})), errors);
   assert.equal(audit.total, 750, 'catalogue should contain 750 designs');
   assert.equal(audit.categories.length, 15, 'catalogue should contain 15 categories');
   assert.equal(new Set(audit.allIds).size, 750, 'all template IDs should be globally unique');
